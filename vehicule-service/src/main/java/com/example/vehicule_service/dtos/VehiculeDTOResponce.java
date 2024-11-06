@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class VehiculeDTO_Responce<T> {
+public class VehiculeDTOResponce<T> {
     private int currentPage;
     private int totalPages;
     private int pageSize;
