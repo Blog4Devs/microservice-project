@@ -55,10 +55,13 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>com.commons</groupId>
-    		<artifactId>commons</artifactId>
+			<groupId>com.commons</groupId> <!-- Use a unique group ID -->
+			<artifactId>commons</artifactId>
 			<version>1.0-SNAPSHOT</version>
+			<scope>system</scope>
+			<systemPath>C:\Users\HP\Desktop\microservice-project\commons\target\commons-1.0-SNAPSHOT.jar</systemPath>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -91,7 +94,8 @@
 					</excludes>
 				</configuration>
 			</plugin>
-		</plugins>
+</plugins>
+		
 	</build>
 
 </project>
