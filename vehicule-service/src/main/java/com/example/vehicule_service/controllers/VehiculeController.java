@@ -1,10 +1,12 @@
 package com.example.vehicule_service.controllers;
 
+import com.example.vehicule_service.dtos.VehiculeDTO;
 import com.example.vehicule_service.dtos.VehiculeDTOResponce;
 import com.example.vehicule_service.entities.Vehicule;
 import com.example.vehicule_service.services.VehiculeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,11 +28,19 @@ public class VehiculeController {
     VehiculeDTOResponce<Vehicule> vehicules = vehiculeService.get_Vehicule(page, size,id_proprietaire );
     return ResponseEntity.ok(vehicules);
 }
+    @GetMapping("/vehicules/state")
+    public void  update_vehicule(Long id_vehicule,String state){
+    vehiculeService.update_vehicule_status(id_vehicule, state);
+
+    }
+
 
 
 @PostMapping("/vehicules")
-    public ResponseEntity add_vehicule(@RequestBody Vehicule vehicule){
-return null;
+    public ResponseEntity<Long> add_vehicule(@RequestBody VehiculeDTO vehiculeDTO){
+Long id_vehicule=vehiculeService.add_vehicule(vehiculeDTO);
+return  new ResponseEntity<>(id_vehicule, HttpStatus.CREATED);
+
 }
 
 

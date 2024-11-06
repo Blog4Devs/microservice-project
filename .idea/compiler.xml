@@ -3,23 +3,12 @@
   <component name="CompilerConfiguration">
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />
-      <profile name="Maven default annotation processors profile" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <module name="vehicule-service" />
-        <module name="maintenance-service" />
-        <module name="invoice-service" />
-        <module name="client-service" />
-      </profile>
     </annotationProcessing>
-  </component>
-  <component name="JavacSettings">
-    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="client-service" options="-parameters" />
-      <module name="invoice-service" options="-parameters" />
-      <module name="maintenance-service" options="-parameters" />
-      <module name="vehicule-service" options="-parameters" />
-    </option>
+    <bytecodeTargetLevel>
+      <module name="client-service" target="17" />
+      <module name="invoice-service" target="17" />
+      <module name="maintenance-service" target="17" />
+      <module name="vehicule-service" target="17" />
+    </bytecodeTargetLevel>
   </component>
 </project>

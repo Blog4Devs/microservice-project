@@ -1,7 +1,9 @@
 package com.example.vehicule_service.services;
 
+import com.example.vehicule_service.dtos.VehiculeDTO;
 import com.example.vehicule_service.dtos.VehiculeDTOResponce;
 import com.example.vehicule_service.entities.Vehicule;
+import com.example.vehicule_service.enums.VehiculeState;
 import com.example.vehicule_service.mappers.VehiculeMapper;
 import com.example.vehicule_service.repositories.VehiculeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +33,17 @@ public class VehiculeService {
         return vehiculeMapper.toPageResponseDto(vehiculepage);
     }
 
+public void update_vehicule_status(Long id_vehicule,String state){
+        Vehicule vehicule=vehiculeRepository.findByIdvehicule(id_vehicule);
+        vehicule.setVehiculeState(VehiculeState.valueOf(state));
+        vehiculeRepository.save(vehicule);
 
+}
+public Long add_vehicule(VehiculeDTO vehiculedto){
+Vehicule vehicule=vehiculeMapper.from_vehiculeDTO_to_vehicule(vehiculedto);
+Vehicule vehiculesaved=vehiculeRepository.save(vehicule);
+    return vehiculesaved.getIdvehicule();
+    }
 
 
 }
