@@ -1,0 +1,22 @@
+# Ignore the Maven target directory to avoid copying build artifacts into the image
+target/
+
+# Ignore local configuration files
+*.log
+*.env
+*.properties
+
+# Ignore any IDE configuration and project files
+.idea/
+*.iml
+*.classpath
+*.project
+.vscode/
+*.swp
+
+# Ignore OS or system files
+.DS_Store
+Thumbs.db
+
+# Ignore other hidden files or folders not required for the build
+.*
