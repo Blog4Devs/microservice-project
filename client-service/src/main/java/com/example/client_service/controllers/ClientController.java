@@ -13,8 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.example.client_service.dtos.PageResponseDto;
+import com.commons.dtos.PageResponseDto;
 import com.example.client_service.entities.Client;
 import com.example.client_service.services.ClientService;
 
