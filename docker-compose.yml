@@ -23,15 +23,13 @@ services:
     ports:
       - "5433:5432"
     environment:
-      POSTGRES_USER: client_db_user
-      POSTGRES_PASSWORD: client_db_password
-      POSTGRES_DB: client_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+
+
       CLIENT_DB_HOST: postgres_instance1
-      CLIENT_DB_PORT: 5432
       SPRING_DATASOURCE_CLIENT_URL: jdbc:postgresql://postgres_instance1:5432/client_db
-      SPRING_DATASOURCE_CLIENT_USERNAME: client_db_user
-      SPRING_DATASOURCE_CLIENT_PASSWORD: client_db_password
-      SPRING_DATASOURCE_CLIENT_DRIVER_CLASS_NAME: org.postgresql.Driver
+
     volumes:
       - postgres_data1:/var/lib/postgresql/data
 
@@ -42,15 +40,12 @@ services:
     ports:
       - "5434:5432"
     environment:
-      POSTGRES_USER: vehicule_db_user
-      POSTGRES_PASSWORD: vehicule_db_password
-      POSTGRES_DB: vehicule_db
-      VEHICULE_DB_HOST: postgres_instance2
-      VEHICULE_DB_PORT: 5432
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+
       SPRING_DATASOURCE_VEHICULE_URL: jdbc:postgresql://postgres_instance2:5432/vehicule_db
-      SPRING_DATASOURCE_VEHICULE_USERNAME: vehicule_db_user
-      SPRING_DATASOURCE_VEHICULE_PASSWORD: vehicule_db_password
-      SPRING_DATASOURCE_VEHICULE_DRIVER_CLASS_NAME: org.postgresql.Driver
+
+
     volumes:
       - postgres_data2:/var/lib/postgresql/data
 
@@ -61,15 +56,11 @@ services:
     ports:
       - "5435:5432"
     environment:
-      POSTGRES_USER: maintenance_db_user
-      POSTGRES_PASSWORD: maintenance_db_password
-      POSTGRES_DB: maintenance_db
-      MAINTENANCE_DB_HOST: postgres_instance3
-      MAINTENANCE_DB_PORT: 5432
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+
       SPRING_DATASOURCE_MAINTENANCE_URL: jdbc:postgresql://postgres_instance3:5432/maintenance_db
-      SPRING_DATASOURCE_MAINTENANCE_USERNAME: maintenance_db_user
-      SPRING_DATASOURCE_MAINTENANCE_PASSWORD: maintenance_db_password
-      SPRING_DATASOURCE_MAINTENANCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+
     volumes:
       - postgres_data3:/var/lib/postgresql/data
 
