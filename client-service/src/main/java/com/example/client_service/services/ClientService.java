@@ -8,10 +8,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.example.client_service.dtos.PageResponseDto;
+import com.commons.dtos.PageResponseDto;
+import com.commons.mappers.PageResponseMapper;
 import com.example.client_service.entities.Client;
 import com.example.client_service.exceptions.ClientNotFoundException;
-import com.example.client_service.mappers.PageResponseMapper;
 import com.example.client_service.repositories.ClientRepository;
 
 @Service

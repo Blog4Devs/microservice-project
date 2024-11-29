@@ -33,17 +33,19 @@ public class VehiculeService {
         return vehiculeMapper.toPageResponseDto(vehiculepage);
     }
 
-public void update_vehicule_status(Long id_vehicule,String state){
+    public void update_vehicule_status(Long id_vehicule,Boolean delivered){
         Vehicule vehicule=vehiculeRepository.findByIdvehicule(id_vehicule);
-        vehicule.setVehiculeState(VehiculeState.valueOf(state));
+        vehicule.setDelivered(delivered);
         vehiculeRepository.save(vehicule);
 
-}
-public Long add_vehicule(VehiculeDTO vehiculedto){
-Vehicule vehicule=vehiculeMapper.from_vehiculeDTO_to_vehicule(vehiculedto);
-Vehicule vehiculesaved=vehiculeRepository.save(vehicule);
-    return vehiculesaved.getIdvehicule();
     }
 
+    public Long add_vehicule(VehiculeDTO vehiculedto){
+        Vehicule vehicule=vehiculeMapper.from_vehiculeDTO_to_vehicule(vehiculedto);
+        Vehicule vehiculesaved=vehiculeRepository.save(vehicule);
+        return vehiculesaved.getIdVehicle();
+    }
+
+    
 
 }

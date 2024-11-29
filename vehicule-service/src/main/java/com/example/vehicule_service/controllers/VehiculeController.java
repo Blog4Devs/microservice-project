@@ -29,8 +29,8 @@ public class VehiculeController {
     return ResponseEntity.ok(vehicules);
 }
     @GetMapping("/vehicules/state")
-    public void  update_vehicule(Long id_vehicule,String state){
-    vehiculeService.update_vehicule_status(id_vehicule, state);
+    public void  update_vehicule(Long id_vehicule,Boolean delivered){
+    vehiculeService.update_vehicule_status(id_vehicule, delivered);
 
     }
 
