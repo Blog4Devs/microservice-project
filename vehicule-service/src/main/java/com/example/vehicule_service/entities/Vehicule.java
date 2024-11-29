@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
 import java.util.Date;
 
 @Data
@@ -16,18 +17,19 @@ import java.util.Date;
 public class Vehicule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idvehicule;
+    private Long idVehicle;
     private String vin;
-    private String num_matriculation;
+    private String numMatriculation;
     private String marque;
     private int annee;
     private String color;
     private int kilometrage;
     @Enumerated(EnumType.STRING)
     private Carburant carburant;
-    private Date date_achat;
-    private Long idproprietaire;
-    @Enumerated(EnumType.STRING)
-    private VehiculeState vehiculeState;
+    private Date dateAchat;
+    private Long idProprietaire;
+    private boolean isDelivered;
 
+    @Column(nullable = false)
+    private Instant updatedAt;
 }

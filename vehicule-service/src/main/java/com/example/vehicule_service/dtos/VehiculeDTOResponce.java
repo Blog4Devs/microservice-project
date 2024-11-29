@@ -15,5 +15,4 @@ public class VehiculeDTOResponce<T> {
     private int pageSize;
     private long totalElement;
     private List<T> content;
-
 }

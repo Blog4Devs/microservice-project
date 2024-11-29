@@ -14,15 +14,14 @@ import java.util.Date;
 @Data
 public class VehiculeDTO {
     private String vin;
-    private String num_matriculation;
+    private String numMatriculation;
     private String marque;
     private int annee;
     private String color;
     private int kilometrage;
-
     private Carburant carburant;
-    private Date date_achat;
-    private Long idproprietaire;
-
-    private VehiculeState vehiculeState;
+    private Date dateAchat;
+    private String cin ;
+    private Long idProprietaire;
+    private boolean isDelivered;
 }

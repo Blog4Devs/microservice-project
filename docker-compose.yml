@@ -1,0 +1,104 @@
+version: "3.8"
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_HOST: mongodb
+      MONGO_PORT: 27017
+      MONGO_DATABASE: mongo_db
+      MONGO_AUTH_DB: admin
+    volumes:
+      - mongodb_data:/data/db
+
+  postgres_client_service:
+    image: postgres:15
+    container_name: postgres_instance1
+    restart: always
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: client_db_user
+      POSTGRES_PASSWORD: client_db_password
+      POSTGRES_DB: client_db
+      CLIENT_DB_HOST: postgres_instance1
+      CLIENT_DB_PORT: 5432
+      SPRING_DATASOURCE_CLIENT_URL: jdbc:postgresql://postgres_instance1:5432/client_db
+      SPRING_DATASOURCE_CLIENT_USERNAME: client_db_user
+      SPRING_DATASOURCE_CLIENT_PASSWORD: client_db_password
+      SPRING_DATASOURCE_CLIENT_DRIVER_CLASS_NAME: org.postgresql.Driver
+    volumes:
+      - postgres_data1:/var/lib/postgresql/data
+
+  postgres_vehicule_service:
+    image: postgres:15
+    container_name: postgres_instance2
+    restart: always
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_USER: vehicule_db_user
+      POSTGRES_PASSWORD: vehicule_db_password
+      POSTGRES_DB: vehicule_db
+      VEHICULE_DB_HOST: postgres_instance2
+      VEHICULE_DB_PORT: 5432
+      SPRING_DATASOURCE_VEHICULE_URL: jdbc:postgresql://postgres_instance2:5432/vehicule_db
+      SPRING_DATASOURCE_VEHICULE_USERNAME: vehicule_db_user
+      SPRING_DATASOURCE_VEHICULE_PASSWORD: vehicule_db_password
+      SPRING_DATASOURCE_VEHICULE_DRIVER_CLASS_NAME: org.postgresql.Driver
+    volumes:
+      - postgres_data2:/var/lib/postgresql/data
+
+  postgres_maintenance_service:
+    image: postgres:15
+    container_name: postgres_instance3
+    restart: always
+    ports:
+      - "5435:5432"
+    environment:
+      POSTGRES_USER: maintenance_db_user
+      POSTGRES_PASSWORD: maintenance_db_password
+      POSTGRES_DB: maintenance_db
+      MAINTENANCE_DB_HOST: postgres_instance3
+      MAINTENANCE_DB_PORT: 5432
+      SPRING_DATASOURCE_MAINTENANCE_URL: jdbc:postgresql://postgres_instance3:5432/maintenance_db
+      SPRING_DATASOURCE_MAINTENANCE_USERNAME: maintenance_db_user
+      SPRING_DATASOURCE_MAINTENANCE_PASSWORD: maintenance_db_password
+      SPRING_DATASOURCE_MAINTENANCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+    volumes:
+      - postgres_data3:/var/lib/postgresql/data
+
+  cdc-service:
+    image: your-cdc-service-image
+    ports:
+      - "8085:8085"
+    environment:
+      CLIENT_DB_URL: jdbc:postgresql://postgres_instance1:5432/client_db
+      CLIENT_DB_USERNAME: client_db_user
+      CLIENT_DB_PASSWORD: client_db_password
+
+      VEHICLE_DB_URL: jdbc:postgresql://postgres_instance2:5432/vehicule_db
+      VEHICLE_DB_USERNAME: vehicule_db_user
+      VEHICLE_DB_PASSWORD: vehicule_db_password
+
+      MAINTENANCE_DB_URL: jdbc:postgresql://postgres_instance3:5432/maintenance_db
+      MAINTENANCE_DB_USERNAME: maintenance_db_user
+      MAINTENANCE_DB_PASSWORD: maintenance_db_password
+
+      MONGO_USERNAME: mongo_user
+      MONGO_PASSWORD: mongo_password
+      MONGO_HOST: mongodb
+      MONGO_PORT: 27017
+      MONGO_DATABASE: invoice_db
+      MONGO_AUTH_DB: admin
+
+volumes:
+  mongodb_data:
+  postgres_data1:
+  postgres_data2:
+  postgres_data3:

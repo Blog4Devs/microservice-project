@@ -3,8 +3,8 @@ package com.example.maintenance_service.services;
 import com.commons.dtos.PageResponseDto;
 import com.commons.mappers.PageResponseMapper;
 import com.example.maintenance_service.entities.Maintenance;
-import com.example.maintenance_service.entities.MaintenanceStatus;
 import com.example.maintenance_service.entities.Operation;
+import com.example.maintenance_service.enums.MaintenanceStatus;
 import com.example.maintenance_service.exceptions.MaintenanceNotFoundException;
 import com.example.maintenance_service.exceptions.VehiculeNotFoundException;
 import com.example.maintenance_service.proxy.VehicleFeignClient;
@@ -36,7 +36,7 @@ public class MaintenanceServiceImpl implements MaintenanceService {
 
         if (maintenance.getStatus() == null) {
             maintenance.setStatus(MaintenanceStatus.PROCESSING);
-            // send notification
+            // TODO: send notification
         }
 
         return maintenanceRepository.save(maintenance);

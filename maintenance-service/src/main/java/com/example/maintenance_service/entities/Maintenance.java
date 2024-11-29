@@ -1,6 +1,7 @@
 package com.example.maintenance_service.entities;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -10,6 +11,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import java.time.Instant;
 import java.util.List;
+
+import com.example.maintenance_service.enums.MaintenanceStatus;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -38,4 +42,8 @@ public class Maintenance {
   List<Operation> operations;
 
   private Long vehicleId;
+  private boolean isPaid;
+
+  @Column(nullable = false)
+  private Instant updatedAt;
 }

@@ -1,7 +1,6 @@
-package com.example.maintenance_service.entities;
+package com.example.maintenance_service.enums;
 
 public enum MaintenanceStatus {
-  PAID,
   PROCESSING,
   FINISHED
 }
