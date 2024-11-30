@@ -123,15 +123,15 @@ services:
     ports:
       - "8085:8085"
     environment:
-      CLIENT_DB_URL: jdbc:postgresql://postgres_instance1:5432/client_db
+      CLIENT_DB_URL: jdbc:postgresql://postgres_client_service:5432/client_db
       CLIENT_DB_USERNAME: user
       CLIENT_DB_PASSWORD: password
 
-      VEHICLE_DB_URL: jdbc:postgresql://postgres_instance2:5432/vehicule_db
+      VEHICLE_DB_URL: jdbc:postgresql://postgres_vehicule_service:5432/vehicule_db
       VEHICLE_DB_USERNAME: user
       VEHICLE_DB_PASSWORD: password
 
-      MAINTENANCE_DB_URL: jdbc:postgresql://postgres_instance3:5432/maintenance_db
+      MAINTENANCE_DB_URL: jdbc:postgresql://postgres_maintenance_service:5432/maintenance_db
       MAINTENANCE_DB_USERNAME: user
       MAINTENANCE_DB_PASSWORD: password
 
