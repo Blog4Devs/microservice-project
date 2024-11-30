@@ -1,7 +1,7 @@
 package com.example.maintenance_service.repositories;
 
 import com.example.maintenance_service.entities.Maintenance;
-import com.example.maintenance_service.enums.MaintenanceStatus;
+import com.commons.enums.MaintenanceStatus;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -12,7 +12,7 @@ import jakarta.persistence.OneToMany;
 import java.time.Instant;
 import java.util.List;
 
-import com.example.maintenance_service.enums.MaintenanceStatus;
+import com.commons.enums.MaintenanceStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
