@@ -1,4 +1,8 @@
+server:
+  port: 8084
 spring:
+  application:
+    name: cdc-service
   datasource:
     client:
       url: ${CLIENT_DB_URL:jdbc:postgresql://localhost:5432/client_db}
