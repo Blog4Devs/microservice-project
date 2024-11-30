@@ -21,6 +21,8 @@ public class MaintenanceDto {
     private String description;
     private MaintenanceStatus status;
     private List<OperationDto> operations;
+    private Long vehicleId;
+    private Long idProprietaire;
     private boolean isPaid;
     private Instant updatedAt;
 
@@ -29,7 +31,6 @@ public class MaintenanceDto {
     @AllArgsConstructor
     public static class OperationDto {
         private Long id;
-        private String name;
         private String description;
         private Long price;
         private Instant updatedAt;

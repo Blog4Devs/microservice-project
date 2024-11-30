@@ -1,12 +1,10 @@
 package com.example.cdc_service.services;
 
-import java.nio.file.Path;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -23,31 +21,23 @@ import com.example.cdc_service.repositories.invoice.InvoiceRepository;
 import com.example.cdc_service.repositories.maintenance.MaintenanceRepository;
 import com.example.cdc_service.repositories.vehicule.VehiculeRepository;
 
-
-import java.io.*;
-import java.nio.file.*;
-import java.time.format.DateTimeParseException;
-
-import org.springframework.core.io.Resource;
-
 @Service
-public class CdcService {
+public class CdcServiceTest {
 
-    private static final String SYNC_TIME_FILE = "lastSyncTime.txt";
     private final ClientRepository clientRepository;
     private final VehiculeRepository vehiculeRepository;
     private final MaintenanceRepository maintenanceRepository;
     private final InvoiceRepository invoiceRepository;
 
-    private Instant lastSyncTime;
+    private Instant lastSyncTime = Instant.now().minus(5, ChronoUnit.MINUTES);
 
-    public CdcService(ClientRepository clientRepository, VehiculeRepository vehiculeRepository,
+    public CdcServiceTest(ClientRepository clientRepository, VehiculeRepository vehiculeRepository,
                       MaintenanceRepository maintenanceRepository, InvoiceRepository invoiceRepository) {
         this.clientRepository = clientRepository;
         this.vehiculeRepository = vehiculeRepository;
         this.maintenanceRepository = maintenanceRepository;
         this.invoiceRepository = invoiceRepository;
-        this.lastSyncTime = readLastSyncTime();
+        // TODO: get lastSyncTime from the file
     }
 
     @Scheduled(fixedRate = 5000)
@@ -55,33 +45,10 @@ public class CdcService {
         pollClients();
         pollVehicules();
         pollMaintenances();
-        lastSyncTime = Instant.now();
-        writeLastSyncTime(lastSyncTime);
+        lastSyncTime = Instant.now(); // TODO: to be stored in a file
     }
 
-    private Instant readLastSyncTime() {
-        try {
-            Resource resource = new ClassPathResource(SYNC_TIME_FILE);
-            if (!resource.exists()) {
-                return Instant.now().minus(5, ChronoUnit.MINUTES);
-            }
-            Path path = resource.getFile().toPath();
-            String content = Files.readString(path).trim();
-            return Instant.parse(content);
-        } catch (IOException | DateTimeParseException e) {
-            return Instant.now().minus(5, ChronoUnit.MINUTES);
-        }
-    }
-
-    private void writeLastSyncTime(Instant time) {
-        try {
-            Path path = Paths.get("src/main/resources/" + SYNC_TIME_FILE);
-            Files.writeString(path, time.toString(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
+    
     public void pollClients() {
         List<Client> changes = clientRepository.findByUpdateAtAfter(lastSyncTime);
         List<Invoice> invoices = new ArrayList<>();
@@ -124,8 +91,8 @@ public class CdcService {
 
     private Invoice mapVehiculeToInvoice(Vehicule vehicule) {
         Invoice invoice = invoiceRepository.findById(vehicule.getIdProprietaire()).get();
-        List<VehiculeDTO> vehiculesDTO = invoice.getVehicules();
-        vehiculesDTO.add(VehiculeMapper.toDto(vehicule));
+        List<VehiculeDTO> vehiculesDTO=invoice.getVehicules();
+        vehiculesDTO.add(VehiculeMapper.toDto(vehicule)) ;
         invoice.setVehicules(vehiculesDTO);
         return invoice;
     }

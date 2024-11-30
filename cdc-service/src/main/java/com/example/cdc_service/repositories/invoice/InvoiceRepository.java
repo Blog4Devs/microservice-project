@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import com.example.cdc_service.entities.invoice.Invoice;
 
 @Repository
-public interface InvoiceRepository extends MongoRepository<Invoice, String> {
+public interface InvoiceRepository extends MongoRepository<Invoice, Long> {
 }

@@ -1,23 +1,32 @@
 package com.example.cdc_service.entities.invoice;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.commons.dtos.VehiculeDTO;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.commons.dtos.ClientDTO;
+import com.commons.dtos.MaintenanceDto;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 @Document(collection = "invoices")
-@Data 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Invoice {
     @Id
-    private String id;
-
-    private String clientId;
-    private String cin;
-    private String vehicleId;
-    private String maintenanceId;
-    private LocalDateTime timestamp;
+    private Long id;
+    private ClientDTO client;
+    private List<VehiculeDTO> vehicules = new ArrayList<>();
+    private List<MaintenanceDto> maintenances = new ArrayList<>();
+    private Instant timestamp;
     
 }

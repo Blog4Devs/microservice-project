@@ -42,6 +42,7 @@ public class Maintenance {
   List<Operation> operations;
 
   private Long vehicleId;
+  private Long idProprietaire;  
   private boolean isPaid;
 
   @Column(nullable = false)

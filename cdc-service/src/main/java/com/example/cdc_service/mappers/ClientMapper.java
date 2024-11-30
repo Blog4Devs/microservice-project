@@ -2,12 +2,10 @@ package com.example.cdc_service.mappers;
 
 import com.commons.dtos.ClientDTO;
 import com.example.cdc_service.entities.client.Client;
-import org.springframework.stereotype.Component;
 
-@Component
 public class ClientMapper {
 
-    public ClientDTO toDTO(Client client) {
+    public static ClientDTO toDTO(Client client) {
         if (client == null) {
             return null;
         }
@@ -24,7 +22,7 @@ public class ClientMapper {
         return clientDTO;
     }
 
-    public Client toEntity(ClientDTO clientDTO) {
+    public static Client toEntity(ClientDTO clientDTO) {
         if (clientDTO == null) {
             return null;
         }

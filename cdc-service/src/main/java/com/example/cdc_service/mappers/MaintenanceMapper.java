@@ -12,21 +12,25 @@ public class MaintenanceMapper {
         if (maintenance == null) {
             return null;
         }
-        return new MaintenanceDto(
-            maintenance.getId(),
-            maintenance.getStartTime(),
-            maintenance.getPredictedEndTime(),
-            maintenance.getEndTime(),
-            maintenance.getDescription(),
-            maintenance.getStatus(),
-            maintenance.getOperations() != null ? 
+        MaintenanceDto maintenanceDto = new MaintenanceDto();
+        maintenanceDto.setId(maintenance.getId());
+        maintenanceDto.setStartTime(maintenance.getStartTime());
+        maintenanceDto.setPredictedEndTime(maintenance.getPredictedEndTime());
+        maintenanceDto.setEndTime(maintenance.getEndTime());
+        maintenanceDto.setDescription(maintenance.getDescription());
+        maintenanceDto.setStatus(maintenance.getStatus());
+        maintenanceDto.setOperations(
+            maintenance.getOperations() != null ?
                 maintenance.getOperations()
                     .stream()
                     .map(OperationMapper::toDto)
-                    .collect(Collectors.toList()) : null,
-            maintenance.isPaid(),
-            maintenance.getUpdatedAt()
+                    .collect(Collectors.toList()) : null
         );
+        maintenanceDto.setPaid(maintenance.isPaid());
+        maintenanceDto.setUpdatedAt(maintenance.getUpdatedAt());
+        maintenanceDto.setIdProprietaire(maintenance.getIdProprietaire());
+        maintenanceDto.setVehicleId(maintenance.getVehicleId());
+        return maintenanceDto;
     }
 
     public static Maintenance toEntity(MaintenanceDto maintenanceDto) {
@@ -49,6 +53,8 @@ public class MaintenanceMapper {
         );
         maintenance.setPaid(maintenanceDto.isPaid());
         maintenance.setUpdatedAt(maintenanceDto.getUpdatedAt());
+        maintenance.setIdProprietaire(maintenanceDto.getIdProprietaire());
+        maintenance.setVehicleId(maintenanceDto.getVehicleId());
         return maintenance;
     }
 
@@ -58,10 +64,12 @@ public class MaintenanceMapper {
             if (operation == null) {
                 return null;
             }
-            return new MaintenanceDto.OperationDto(
-                operation.getId(),
-                operation.getDescription()
-            );
+            MaintenanceDto.OperationDto operationDto = new MaintenanceDto.OperationDto();
+            operationDto.setId(operation.getId());
+            operationDto.setDescription(operation.getDescription());
+            operationDto.setPrice(operation.getPrice());
+            operationDto.setUpdatedAt(operation.getUpdatedAt());
+            return operationDto;
         }
 
         public static Operation toEntity(MaintenanceDto.OperationDto operationDto) {
@@ -72,8 +80,7 @@ public class MaintenanceMapper {
             operation.setId(operationDto.getId());
             operation.setDescription(operationDto.getDescription());
             operation.setPrice(operationDto.getPrice());
-            operation.setUpdateAt(operationDto.getUpdatedAt());
-
+            operation.setUpdatedAt(operationDto.getUpdatedAt());
             return operation;
         }
     }

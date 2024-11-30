@@ -12,7 +12,7 @@ import jakarta.persistence.OneToMany;
 import java.time.Instant;
 import java.util.List;
 
-import com.example.cdc_service.enums.MaintenanceStatus;
+import com.commons.enums.MaintenanceStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -42,6 +42,7 @@ public class Maintenance {
     List<Operation> operations;
 
     private Long vehicleId;
+    private Long idProprietaire;
     private boolean isPaid;
         
     @Column(nullable = false)

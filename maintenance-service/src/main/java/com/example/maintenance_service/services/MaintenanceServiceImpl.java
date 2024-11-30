@@ -62,7 +62,7 @@ public class MaintenanceServiceImpl implements MaintenanceService {
                         MaintenanceStatus.FINISHED.toString());
 
                 maintenance.setEndTime(Instant.now());
-                // send notification
+                // TODO: send notification
             }
             maintenance.setStatus(status);
         }

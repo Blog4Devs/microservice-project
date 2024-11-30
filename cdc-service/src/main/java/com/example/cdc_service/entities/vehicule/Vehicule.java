@@ -6,8 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
-import java.util.Date;
-import com.example.cdc_service.enums.Carburant;
+import com.commons.enums.Carburant;
 
 @Data
 @Entity
@@ -25,7 +24,7 @@ public class Vehicule {
     private int kilometrage;
     @Enumerated(EnumType.STRING)
     private Carburant carburant;
-    private Date dateAchat;
+    private Instant dateAchat;
     private Long idProprietaire;
     private boolean isDelivered;
         
