@@ -83,7 +83,7 @@ public class CdcService {
     }
 
     public void pollClients() {
-        List<Client> changes = clientRepository.findByUpdateAtAfter(lastSyncTime);
+        List<Client> changes = clientRepository.findByUpdatedAtAfter(lastSyncTime);
         List<Invoice> invoices = new ArrayList<>();
         changes.forEach(change -> {
             Invoice invoice = mapClientToInvoice(change);

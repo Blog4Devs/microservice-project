@@ -8,18 +8,18 @@ spring:
       url: ${CLIENT_DB_URL:jdbc:postgresql://localhost:5432/client_db}
       username: ${CLIENT_DB_USERNAME:client_user}
       password: ${CLIENT_DB_PASSWORD:client_pass}
-      driver-class-name: ${CLIENT_DB_DRIVER:org.postgresql.Driver}
-    vehicle:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+    vehicule:
       url: ${VEHICLE_DB_URL:jdbc:postgresql://localhost:5432/vehicle_db}
       username: ${VEHICLE_DB_USERNAME:vehicle_user}
       password: ${VEHICLE_DB_PASSWORD:vehicle_pass}
-      driver-class-name: ${VEHICLE_DB_DRIVER:org.postgresql.Driver}
+      driver-class-name: com.mysql.cj.jdbc.Driver
     maintenance:
       url: ${MAINTENANCE_DB_URL:jdbc:postgresql://localhost:5432/maintenance_db}
       username: ${MAINTENANCE_DB_USERNAME:maintenance_user}
       password: ${MAINTENANCE_DB_PASSWORD:maintenance_pass}
-      driver-class-name: ${MAINTENANCE_DB_DRIVER:org.postgresql.Driver}
+      driver-class-name: com.mysql.cj.jdbc.Driver
 
-  data:
-    mongodb:
-      uri: ${MONGODB_URI:mongodb://localhost:27017/invoice_db}
+#  data:
+#    mongodb:
+#      uri: ${MONGODB_URI:mongodb://localhost:27017/invoice_db}

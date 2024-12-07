@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-    basePackages = "com.example.repositories.vehicule",
+    basePackages = "com.example.cdc_service.entities.vehicule",
     entityManagerFactoryRef = "vehicleEntityManagerFactory",
     transactionManagerRef = "vehicleTransactionManager"
 )
@@ -37,7 +37,7 @@ public class VehiculeDataSourceConfig {
             EntityManagerFactoryBuilder builder) {
         return builder
                 .dataSource(vehiculeDataSource())
-                .packages("com.example.entities.vehicule")
+                .packages("com.example.cdc_service.entities.maintenance")
                 .persistenceUnit("vehicule")
                 .build();
     }

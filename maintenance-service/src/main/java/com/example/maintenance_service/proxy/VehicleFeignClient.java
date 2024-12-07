@@ -4,7 +4,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "vehicle-service")
+@FeignClient(name = "vehicule-service", url = "http://vehicule-service:8089")
 public interface VehicleFeignClient {
   @GetMapping("/vehicles/{id}")
   Boolean getVehicleById(@PathVariable Long id);

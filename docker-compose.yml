@@ -3,6 +3,8 @@ services:
   mongodb:
     image: mongo:latest
     container_name: mongodb
+    networks:
+      - osama
     restart: always
     ports:
       - 27017:27017
@@ -12,103 +14,153 @@ services:
       MONGO_AUTH_DB: admin
     volumes:
       - mongodb_data:/data/db
-      
+
   mongo-express:
-    image: mongo-express
-    restart: always
-    ports:
-      - 8081:8081
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: user
-      ME_CONFIG_MONGODB_ADMINPASSWORD: password
-      ME_CONFIG_MONGODB_URL: mongodb://user:password@mongodb:27017/
-      ME_CONFIG_BASICAUTH: false
-      
-  postgres_client_service:
-    image: postgres:15
-    container_name: postgres_instance1
-    restart: always
-    ports:
-      - "5433:5432"
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: client_db
-    volumes:
-      - postgres_data1:/var/lib/postgresql/data
+      image: mongo-express
+      restart: always
+      networks:
+        - osama
+      ports:
+        - 8090:8081
+      environment:
+        ME_CONFIG_MONGODB_ADMINUSERNAME: user
+        ME_CONFIG_MONGODB_ADMINPASSWORD: password
+        ME_CONFIG_MONGODB_URL: mongodb://user:password@mongodb:27017/
+        ME_CONFIG_BASICAUTH: false
 
-  postgres_vehicule_service:
-    image: postgres:15
-    container_name: postgres_instance2
+  mysql_vehicule_service:
+    image:  mysql
+    container_name: mysql_instance2
+    networks:
+      - osama
     restart: always
     ports:
-      - "5434:5432"
+      - "3307:3306"
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: vehicule_db
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: vehicule_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
     volumes:
-      - postgres_data2:/var/lib/postgresql/data
-
-  postgres_maintenance_service:
-    image: postgres:15
-    container_name: postgres_instance3
-    restart: always
-    ports:
-      - "5435:5432"
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: maintenance_db
-    volumes:
-      - postgres_data3:/var/lib/postgresql/data
-
-  client-service:
-    build:
-      context: ./client-service
-    container_name: client_service
-    ports:
-      - "8080:8080"
-    environment:
-      SPRING_DATASOURCE_CLIENT_URL: jdbc:postgresql://postgres_client_service:5432/client_db
-      SPRING_DATASOURCE_CLIENT_USERNAME: user
-      SPRING_DATASOURCE_CLIENT_PASSWORD: password
-    depends_on:
-      - postgres_client_service
+      - mysql_data2:/var/lib/mysql
 
   vehicule-service:
     build:
       context: ./vehicule-service
-    container_name: vehicule_service
+      network: "host"
+    container_name: vehicule-service
+    networks:
+      - osama
     ports:
-      - "8081:8081"
+      - "8089:8081"
     environment:
-      SPRING_DATASOURCE_VEHICULE_URL: jdbc:postgresql://postgres_vehicule_service:5432/vehicule_db
+      SPRING_DATASOURCE_VEHICULE_URL: jdbc:mysql://mysql_vehicule_service:3306/vehicule_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_VEHICULE_USERNAME: user
       SPRING_DATASOURCE_VEHICULE_PASSWORD: password
     depends_on:
-      - postgres_vehicule_service
+      - mysql_vehicule_service
+  # Uncomment and modify similar sections for other services like client-service, etc.
+  mysql_client_service:
+    image: mysql
+    container_name: mysql_instance1
+    networks:
+      - osama
+    restart: always
+    ports:
+      - "3308:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: client_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - mysql_data1:/var/lib/mysql
+  client-service:
+    build:
+      context: ./client-service
+      network: "host"
+    container_name: client_service
+    networks:
+      - osama
+    ports:
+      - "8085:8080"
+    environment:
+      SPRING_DATASOURCE_CLIENT_URL: jdbc:mysql://mysql_client_service:3306/client_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_CLIENT_USERNAME: user
+      SPRING_DATASOURCE_CLIENT_PASSWORD: password
+    depends_on:
+      - mysql_client_service
 
+  # Uncomment and modify similar sections for other services like maintenance-service, etc.
+  mysql_maintenance_service:
+    image: mysql
+    container_name: mysql_instance3
+    networks:
+      - osama
+    restart: always
+    ports:
+      - "3309:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: maintenance_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - mysql_data3:/var/lib/mysql
   maintenance-service:
     build:
       context: ./maintenance-service
+      network: "host"
     container_name: maintenance_service
+    networks:
+      - osama
     ports:
-      - "8082:8082"
+      - "8086:8082"
     environment:
-      SPRING_DATASOURCE_MAINTENANCE_URL: jdbc:postgresql://postgres_maintenance_service:5432/maintenance_db
+      SPRING_DATASOURCE_MAINTENANCE_URL: jdbc:mysql://mysql_maintenance_service:3306/maintenance_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_MAINTENANCE_USERNAME: user
       SPRING_DATASOURCE_MAINTENANCE_PASSWORD: password
     depends_on:
-      - postgres_maintenance_service
-
+      - mysql_maintenance_service
+  # Uncomment and modify similar sections for other services
   invoice-service:
+      build:
+        context: ./invoice-service
+        network: host
+      networks:
+        - osama
+      container_name: invoice_service
+      ports:
+        - "8083:8083"
+      environment:
+        MONGO_USERNAME: admin
+        MONGO_PASSWORD: password
+        MONGO_HOST: mongodb
+        MONGO_PORT: 27017
+        MONGO_DATABASE: invoice_db
+      depends_on:
+        - mongodb
+  cdc-service:
     build:
-      context: ./invoice-service
-    container_name: invoice_service
+      context: ./cdc-service
+      network: host
+    networks:
+      - osama
     ports:
-      - "8083:8083"
+      - "8088:8084"
     environment:
+      CLIENT_DB_URL: jdbc:mysql://mysql_client_service:3306/client_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      CLIENT_DB_USERNAME: user
+      CLIENT_DB_PASSWORD: password
+
+      VEHICLE_DB_URL: jdbc:mysql://mysql_vehicule_service:3306/vehicule_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      VEHICLE_DB_USERNAME: user
+      VEHICLE_DB_PASSWORD: password
+
+      MAINTENANCE_DB_URL: jdbc:mysql://mysql_maintenance_service:3306/maintenance_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      MAINTENANCE_DB_USERNAME: user
+      MAINTENANCE_DB_PASSWORD: password
+
       MONGO_USERNAME: admin
       MONGO_PASSWORD: password
       MONGO_HOST: mongodb
@@ -116,40 +168,27 @@ services:
       MONGO_DATABASE: invoice_db
     depends_on:
       - mongodb
-
-  cdc-service:
-    build:
-      context: ./cdc-service
-    ports:
-      - "8085:8085"
-    environment:
-      CLIENT_DB_URL: jdbc:postgresql://postgres_client_service:5432/client_db
-      CLIENT_DB_USERNAME: user
-      CLIENT_DB_PASSWORD: password
-
-      VEHICLE_DB_URL: jdbc:postgresql://postgres_vehicule_service:5432/vehicule_db
-      VEHICLE_DB_USERNAME: user
-      VEHICLE_DB_PASSWORD: password
-
-      MAINTENANCE_DB_URL: jdbc:postgresql://postgres_maintenance_service:5432/maintenance_db
-      MAINTENANCE_DB_USERNAME: user
-      MAINTENANCE_DB_PASSWORD: password
-
-      MONGO_USERNAME: user
-      MONGO_PASSWORD: password
-      MONGO_HOST: mongodb
-      MONGO_PORT: 27017
-      MONGO_DATABASE: invoice_db
-      MONGO_AUTH_DB: admin
-    depends_on:
-      - mongodb
-      - postgres_maintenance_service
-      - postgres_vehicule_service
-      - postgres_client_service
-
-
+      - mysql_maintenance_service
+      - mysql_vehicule_service
+      - mysql_client_service
+networks:
+  osama:
+    driver: bridge
 volumes:
   mongodb_data:
-  postgres_data1:
-  postgres_data2:
-  postgres_data3:
+  mysql_data1:
+  mysql_data2:
+  mysql_data3:
+
+
+
+
+
+
+
+  #      MONGO_USERNAME: user
+  #      MONGO_PASSWORD: password
+  #      MONGO_HOST: mongodb
+  #      MONGO_PORT: 27017
+  #      MONGO_DATABASE: invoice_db
+  #      MONGO_AUTH_DB: admin

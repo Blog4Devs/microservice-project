@@ -28,7 +28,7 @@ public class VehiculeService {
         Pageable pageable = PageRequest.of(page, size);
         Page<Vehicule> vehiculepage ;
         if (clientId!=null) {
-            vehiculepage = vehiculeRepository.findByIdproprietaire(clientId, pageable);
+            vehiculepage = vehiculeRepository.findByClientId(clientId, pageable);
         } else {
             vehiculepage = vehiculeRepository.findAll(pageable);
         }

@@ -21,7 +21,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-    basePackages = "com.example.repositories.client",
+    basePackages = "com.example.cdc_service.entities.client",
     entityManagerFactoryRef = "clientEntityManagerFactory",
     transactionManagerRef = "clientTransactionManager"
 )
@@ -38,7 +38,7 @@ public class ClientDataSourceConfig {
             EntityManagerFactoryBuilder builder) {
         return builder
                 .dataSource(clientDataSource())
-                .packages("com.example.entities.client")
+                .packages("com.example.cdc_service.entities.client")
                 .persistenceUnit("client")
                 .build();
     }
