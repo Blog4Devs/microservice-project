@@ -17,7 +17,6 @@ public class ClientMapper {
         clientDTO.setPhone(client.getPhone());
         clientDTO.setEmail(client.getEmail());
         clientDTO.setCin(client.getCin());
-        clientDTO.setUpdatedAt(client.getUpdatedAt());
         
         return clientDTO;
     }
@@ -34,7 +33,6 @@ public class ClientMapper {
         client.setPhone(clientDTO.getPhone());
         client.setEmail(clientDTO.getEmail());
         client.setCin(clientDTO.getCin());
-        client.setUpdatedAt(clientDTO.getUpdatedAt());
         
         return client;
     }

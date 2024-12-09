@@ -1,6 +1,8 @@
 package com.example.maintenance_service.services;
 
 import com.commons.dtos.MaintenanceDto;
+import com.commons.dtos.ClientDTO;
+
 import com.commons.dtos.PageResponseDto;
 import com.commons.dtos.MaintenanceDto.OperationDto;
 import com.commons.mappers.PageResponseMapper;
@@ -11,13 +13,18 @@ import com.example.maintenance_service.exceptions.VehiculeNotFoundException;
 import com.example.maintenance_service.mappers.MaintenanceMapper;
 import com.example.maintenance_service.mappers.MaintenanceMapper.OperationMapper;
 import com.example.maintenance_service.proxy.VehicleFeignClient;
+import com.example.maintenance_service.proxy.ClientFeignClient;
+
 import com.example.maintenance_service.repositories.MaintenanceRepository;
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,11 +32,19 @@ public class MaintenanceServiceImpl implements MaintenanceService {
 
     private final MaintenanceRepository maintenanceRepository;
     private final VehicleFeignClient vehicleFeignClient;
+    private final ClientFeignClient clientFeignClient;
+
+    @Value("${spring.mail.username}")
+    private String fromEmail;
+
+    private JavaMailSender mailSender;
 
     public MaintenanceServiceImpl(
-            MaintenanceRepository maintenanceRepository, VehicleFeignClient vehicleFeignClient) {
+        MaintenanceRepository maintenanceRepository, VehicleFeignClient vehicleFeignClient,ClientFeignClient clientFeignClient,JavaMailSender mailSender) {
         this.maintenanceRepository = maintenanceRepository;
         this.vehicleFeignClient = vehicleFeignClient;
+        this.mailSender=mailSender;
+        this.clientFeignClient= clientFeignClient;
     }
 
     @Override
@@ -42,10 +57,12 @@ public class MaintenanceServiceImpl implements MaintenanceService {
 
         if (maintenance.getStatus() == null) {
             maintenance.setStatus(MaintenanceStatus.PROCESSING);
-            // TODO: send notification
+            sendEmail(maintenance.getIdProprietaire(),"subject","body");
         }
-        maintenance.setUpdatedAt(Instant.now());
-        maintenanceRepository.save(MaintenanceMapper.toEntity(maintenance));
+
+        Maintenance maintenance2 = MaintenanceMapper.toEntity(maintenance);
+        maintenance2.setUpdatedAt(Instant.now());
+        maintenanceRepository.save(maintenance2);
         return maintenance;
     }
 
@@ -69,7 +86,9 @@ public class MaintenanceServiceImpl implements MaintenanceService {
                         MaintenanceStatus.FINISHED.toString());
 
                 maintenance.setEndTime(Instant.now());
-                // TODO: send notification
+                
+                sendEmail(maintenance.getIdProprietaire(),"subject","body");
+
             }
             maintenance.setStatus(status);
         }
@@ -116,4 +135,19 @@ public class MaintenanceServiceImpl implements MaintenanceService {
             maintenanceRepository.findAll(pageable).map(maintenance -> MaintenanceMapper.toDto(maintenance))
         );
     }
+
+    public void sendEmail(Long maintenanceId,String subject,String body){
+        ClientDTO client = clientFeignClient.getClientById(maintenanceId);
+
+        SimpleMailMessage message = new SimpleMailMessage();
+
+        message.setTo(client.getAddress());
+        message.setSubject(subject);
+        message.setText(body);
+
+        message.setFrom(fromEmail);
+
+        mailSender.send(message);
+    }
+
 }

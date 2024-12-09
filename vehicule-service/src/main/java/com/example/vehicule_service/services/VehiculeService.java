@@ -10,11 +10,13 @@ import com.example.vehicule_service.repositories.VehiculeRepository;
 
 import java.time.Instant;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import java.util.Optional;
 
 @Service
 public class VehiculeService {
@@ -48,6 +50,13 @@ public class VehiculeService {
         vehicule.setUpdatedAt(Instant.now());
         Vehicule vehiculesaved=vehiculeRepository.save(vehicule);
         return vehiculeMapper.fromVehiculeToVehiculeDTO(vehiculesaved);
+    }
+    
+    public VehiculeDTO getVehiculeById(Long vehiculeId) throws VehiculeNotFoundException{
+        Vehicule vehicule=vehiculeRepository.findById(vehiculeId).orElseThrow(
+                () ->new VehiculeNotFoundException("Vehicule with ID " + vehiculeId + " not found")
+        );
+        return vehiculeMapper.fromVehiculeToVehiculeDTO(vehicule);
     }
 
     public VehiculeDTO updateVehicule(Long vehiculeId, VehiculeDTO updatedVehicule) throws VehiculeNotFoundException{

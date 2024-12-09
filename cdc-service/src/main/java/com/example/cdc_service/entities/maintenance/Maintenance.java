@@ -1,14 +1,8 @@
 package com.example.cdc_service.entities.maintenance;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
+
 import java.time.Instant;
 import java.util.List;
 
@@ -17,8 +11,10 @@ import com.commons.enums.MaintenanceStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
-@Entity
+@Entity(name = "maintenance")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,10 +23,13 @@ public class Maintenance {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "start_time")
     private Instant startTime = Instant.now();
 
+    @Column(name = "predicted_end_time")
     private Instant predictedEndTime;
 
+    @Column(name = "end_time")
     private Instant endTime;
 
     private String description;
@@ -38,13 +37,18 @@ public class Maintenance {
     @Enumerated(EnumType.STRING)
     private MaintenanceStatus status;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "maintenance")
     List<Operation> operations;
 
+    @Column(name = "vehicle_id")
     private Long vehicleId;
+
+    @Column(name = "id_proprietaire")
     private Long idProprietaire;
+
+    @Column(name = "is_paid")
     private boolean isPaid;
-        
-    @Column(nullable = false)
+
+    @Column(nullable = false,name = "updated_at")
     private Instant updatedAt ;
 }

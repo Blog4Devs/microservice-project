@@ -24,7 +24,6 @@ public class MaintenanceDto {
     private Long vehicleId;
     private Long idProprietaire;
     private boolean isPaid;
-    private Instant updatedAt;
 
     @Data
     @NoArgsConstructor
@@ -33,6 +32,5 @@ public class MaintenanceDto {
         private Long id;
         private String description;
         private Long price;
-        private Instant updatedAt;
     }
 }

@@ -38,11 +38,11 @@ public class Maintenance {
   @Enumerated(EnumType.STRING)
   private MaintenanceStatus status;
 
-  @OneToMany(cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "maintenance")
   List<Operation> operations;
 
   private Long vehicleId;
-  private Long idProprietaire;  
+  private Long idProprietaire;
   private boolean isPaid;
 
   @Column(nullable = false)

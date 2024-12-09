@@ -1,15 +1,18 @@
 package com.example.cdc_service.services;
 
-import java.nio.file.Path;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import com.commons.dtos.MaintenanceDto;
 import com.commons.dtos.VehiculeDTO;
 import com.example.cdc_service.entities.client.Client;
 import com.example.cdc_service.entities.invoice.Invoice;
@@ -33,10 +36,10 @@ import org.springframework.core.io.Resource;
 @Service
 public class CdcService {
 
-    private static final String SYNC_TIME_FILE = "lastSyncTime.txt";
+    private static final String SYNC_TIME_FILE = "/home/lastSyncTime.txt";
     private final ClientRepository clientRepository;
     private final VehiculeRepository vehiculeRepository;
-    private final MaintenanceRepository maintenanceRepository;
+    private final MaintenanceRepository maintenanceRepository; 
     private final InvoiceRepository invoiceRepository;
 
     private Instant lastSyncTime;
@@ -55,35 +58,81 @@ public class CdcService {
         pollClients();
         pollVehicules();
         pollMaintenances();
-        lastSyncTime = Instant.now();
+       lastSyncTime = Instant.now();
         writeLastSyncTime(lastSyncTime);
-    }
-
-    private Instant readLastSyncTime() {
-        try {
-            Resource resource = new ClassPathResource(SYNC_TIME_FILE);
-            if (!resource.exists()) {
-                return Instant.now().minus(5, ChronoUnit.MINUTES);
-            }
-            Path path = resource.getFile().toPath();
-            String content = Files.readString(path).trim();
-            return Instant.parse(content);
-        } catch (IOException | DateTimeParseException e) {
-            return Instant.now().minus(5, ChronoUnit.MINUTES);
-        }
     }
 
     private void writeLastSyncTime(Instant time) {
         try {
-            Path path = Paths.get("src/main/resources/" + SYNC_TIME_FILE);
-            Files.writeString(path, time.toString(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+            // Create directories if they don't exist
+            File file = new File(SYNC_TIME_FILE);
+            // Write to the file
+            Files.writeString(file.toPath(), time.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    private Instant readLastSyncTime() {
+        try {
+            File file = new File(SYNC_TIME_FILE);
+            if (!file.exists()) {
+                System.out.println("i'm here hahahahahahahahaha");
+                file.createNewFile();
+
+                return Instant.now().minus(50, ChronoUnit.MINUTES);
+            }
+            String content = Files.readString(file.toPath()).trim();
+            System.out.println("content "+content);
+            return Instant.parse(content);
+        } catch (IOException | DateTimeParseException e) {
+            return Instant.now().minus(5, ChronoUnit.MINUTES);
+        }
+    }
+//    private Instant readLastSyncTime() {
+//        System.out.println("--------------------------------------------------------------");
+//        System.out.println("yssssssssssssssssssssssssssssssssssssssro");
+//        System.out.println("--------------------------------------------------------------");
+//
+//        try {
+//            Resource resource = new ClassPathResource(SYNC_TIME_FILE);
+//            if (!resource.exists()) {
+//                return Instant.now().minus(5, ChronoUnit.MINUTES);
+//            }
+//            Path path = resource.getFile().toPath();
+//            String content = Files.readString(path).trim();
+//            return Instant.parse(content);
+//        } catch (IOException | DateTimeParseException e) {
+//            return Instant.now().minus(5, ChronoUnit.MINUTES);
+//        }
+//
+//    }
+//
+//    private void writeLastSyncTime(Instant time) {
+//        System.out.println("--------------------------------------------------------------");
+//        System.out.println(time);
+//        System.out.println("--------------------------------------------------------------");
+//        try {
+//            Resource resource = new ClassPathResource(SYNC_TIME_FILE);
+//            Path path = resource.getFile().toPath();
+//            System.out.println("--------------------------------------------------------------");
+//            System.out.println(path.getFileName());
+//            System.out.println("--------------------------------------------------------------");
+//
+//            try (FileOutputStream outputStream = new FileOutputStream(path.toFile())) {
+//                System.out.println(Arrays.toString(time.toString().getBytes()));
+//                outputStream.write(time.toString().getBytes());
+//                System.out.println("////////////////////////////////////////////////////");
+//            }
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
     public void pollClients() {
         List<Client> changes = clientRepository.findByUpdatedAtAfter(lastSyncTime);
+        System.out.println("changes "+changes+" "+lastSyncTime);
         List<Invoice> invoices = new ArrayList<>();
         changes.forEach(change -> {
             Invoice invoice = mapClientToInvoice(change);
@@ -124,15 +173,40 @@ public class CdcService {
 
     private Invoice mapVehiculeToInvoice(Vehicule vehicule) {
         Invoice invoice = invoiceRepository.findById(vehicule.getIdProprietaire()).get();
+    
         List<VehiculeDTO> vehiculesDTO = invoice.getVehicules();
-        vehiculesDTO.add(VehiculeMapper.toDto(vehicule));
+        boolean exists = vehiculesDTO.stream()
+            .anyMatch(v -> v.getId().equals(vehicule.getId()));
+        
+        if (exists) {
+            vehiculesDTO = vehiculesDTO.stream()
+                .map((v) -> v.getId().equals(vehicule.getId()) ? VehiculeMapper.toDto(vehicule) : v)
+                .collect(Collectors.toList());
+        } else {
+            vehiculesDTO.add(VehiculeMapper.toDto(vehicule));
+        }
         invoice.setVehicules(vehiculesDTO);
-        return invoice;
-    }
+    
+    return invoice;
+}
+
 
     private Invoice mapMaintenanceToInvoice(Maintenance maintenance) {
         Invoice invoice = invoiceRepository.findById(maintenance.getIdProprietaire()).get();
-        invoice.getMaintenances().add(MaintenanceMapper.toDto(maintenance));
+        List<MaintenanceDto> maintenanceDtos = invoice.getMaintenances();
+        boolean exists = maintenanceDtos.stream()
+            .anyMatch(m -> m.getId().equals(maintenance.getId()));
+
+        if (exists) {
+            maintenanceDtos = maintenanceDtos.stream()
+                .map(m -> m.getId().equals(maintenance.getId()) ? MaintenanceMapper.toDto(maintenance) : m)
+                .collect(Collectors.toList());
+        } else {
+            maintenanceDtos.add(MaintenanceMapper.toDto(maintenance));
+        }
+
+        invoice.setMaintenances(maintenanceDtos);
         return invoice;
     }
+
 }

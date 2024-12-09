@@ -9,7 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
 
-@Entity
+@Entity(name = "client")
 @Data
 public class Client {
 
@@ -31,7 +31,8 @@ public class Client {
     
     @Column(nullable = false, unique = true)
     private String cin;
-    
-    @Column(nullable = false)
+
+
+    @Column(nullable = false, name = "updated_at")
     private Instant updatedAt ;
 }

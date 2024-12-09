@@ -12,7 +12,7 @@ import com.commons.enums.Carburant;
 @AllArgsConstructor
 @NoArgsConstructor
 public class VehiculeDTO {
-    private Long idVehicle;
+    private Long id;
     private String vin;
     private String numMatriculation;
     private String marque;
@@ -21,6 +21,6 @@ public class VehiculeDTO {
     private int kilometrage;
     private Carburant carburant;
     private Instant dateAchat;
+    private Long clientId;
     private boolean isDelivered;
-    private Instant updatedAt;
 }

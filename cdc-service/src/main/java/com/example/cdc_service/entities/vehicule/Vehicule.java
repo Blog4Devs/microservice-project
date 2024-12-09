@@ -9,14 +9,17 @@ import java.time.Instant;
 import com.commons.enums.Carburant;
 
 @Data
-@Entity
+@Entity(name = "vehicule")
 @AllArgsConstructor
 @NoArgsConstructor
 public class Vehicule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idVehicle;
+    @Column(name = "id")
+    private Long id;
     private String vin;
+
+    @Column(name = "num_matriculation")
     private String numMatriculation;
     private String marque;
     private int annee;
@@ -24,10 +27,14 @@ public class Vehicule {
     private int kilometrage;
     @Enumerated(EnumType.STRING)
     private Carburant carburant;
+
+    @Column(name = "date_achat")
     private Instant dateAchat;
+    @Column(name = "client_id")
     private Long idProprietaire;
+    @Column(name = "is_delivered")
     private boolean isDelivered;
-        
-    @Column(nullable = false)
+
+    @Column(nullable = false, name = "updated_at")
     private Instant updatedAt ;
 }

@@ -11,7 +11,7 @@ public class VehiculeMapper {
         }
 
         VehiculeDTO dto = new VehiculeDTO();
-        dto.setIdVehicle(vehicule.getIdVehicle());
+        dto.setId(vehicule.getId());
         dto.setVin(vehicule.getVin());
         dto.setNumMatriculation(vehicule.getNumMatriculation());
         dto.setMarque(vehicule.getMarque());
@@ -21,7 +21,6 @@ public class VehiculeMapper {
         dto.setCarburant(vehicule.getCarburant());
         dto.setDateAchat(vehicule.getDateAchat());
         dto.setDelivered(vehicule.isDelivered());
-        dto.setUpdatedAt(vehicule.getUpdatedAt());
         return dto;
     }
 
@@ -31,7 +30,7 @@ public class VehiculeMapper {
         }
 
         Vehicule vehicule = new Vehicule();
-        vehicule.setIdVehicle(dto.getIdVehicle());
+        vehicule.setId(dto.getId());
         vehicule.setVin(dto.getVin());
         vehicule.setNumMatriculation(dto.getNumMatriculation());
         vehicule.setMarque(dto.getMarque());
@@ -41,7 +40,6 @@ public class VehiculeMapper {
         vehicule.setCarburant(dto.getCarburant());
         vehicule.setDateAchat(dto.getDateAchat());
         vehicule.setDelivered(dto.isDelivered());
-        vehicule.setUpdatedAt(dto.getUpdatedAt());
         return vehicule;
     }
 }

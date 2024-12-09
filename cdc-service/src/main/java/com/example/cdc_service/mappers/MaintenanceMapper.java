@@ -19,6 +19,7 @@ public class MaintenanceMapper {
         maintenanceDto.setEndTime(maintenance.getEndTime());
         maintenanceDto.setDescription(maintenance.getDescription());
         maintenanceDto.setStatus(maintenance.getStatus());
+//        System.out.println("maintenace operations" + maintenance.getOperations());
         maintenanceDto.setOperations(
             maintenance.getOperations() != null ?
                 maintenance.getOperations()
@@ -27,7 +28,6 @@ public class MaintenanceMapper {
                     .collect(Collectors.toList()) : null
         );
         maintenanceDto.setPaid(maintenance.isPaid());
-        maintenanceDto.setUpdatedAt(maintenance.getUpdatedAt());
         maintenanceDto.setIdProprietaire(maintenance.getIdProprietaire());
         maintenanceDto.setVehicleId(maintenance.getVehicleId());
         return maintenanceDto;
@@ -52,7 +52,7 @@ public class MaintenanceMapper {
                     .collect(Collectors.toList()) : null
         );
         maintenance.setPaid(maintenanceDto.isPaid());
-        maintenance.setUpdatedAt(maintenanceDto.getUpdatedAt());
+       
         maintenance.setIdProprietaire(maintenanceDto.getIdProprietaire());
         maintenance.setVehicleId(maintenanceDto.getVehicleId());
         return maintenance;
@@ -68,7 +68,7 @@ public class MaintenanceMapper {
             operationDto.setId(operation.getId());
             operationDto.setDescription(operation.getDescription());
             operationDto.setPrice(operation.getPrice());
-            operationDto.setUpdatedAt(operation.getUpdatedAt());
+          
             return operationDto;
         }
 
@@ -80,7 +80,7 @@ public class MaintenanceMapper {
             operation.setId(operationDto.getId());
             operation.setDescription(operationDto.getDescription());
             operation.setPrice(operationDto.getPrice());
-            operation.setUpdatedAt(operationDto.getUpdatedAt());
+           
             return operation;
         }
     }

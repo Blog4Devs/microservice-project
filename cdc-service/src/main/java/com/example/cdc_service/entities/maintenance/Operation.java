@@ -2,16 +2,15 @@ package com.example.cdc_service.entities.maintenance;
 
 import java.time.Instant;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
-@Entity
+@Entity(name = "operation")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,6 +24,9 @@ public class Operation {
 
     private Long price;
 
-    @Column(nullable = false)
+    @Column(nullable = false,name = "updated_at")
     private Instant updatedAt;
+
+    @ManyToOne
+    private Maintenance maintenance;
 }
