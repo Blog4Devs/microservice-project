@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: client-config
+  namespace: garage-ns
+data:
+  MYSQL_USER: user
+  MYSQL_DATABASE_CLIENT: client_db
+  MYSQL_URL: jdbc:mysql://mysql-client-service:3306/client_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true

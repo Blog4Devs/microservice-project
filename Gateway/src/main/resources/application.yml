@@ -1,0 +1,131 @@
+#spring:
+#  cloud:
+#    gateway:
+#      routes:
+##        - id: vehicule-service-swagger
+##          uri: http://vehicule-service:8081
+##          predicates:
+##            - Path=/api/vehicules/swagger-ui
+##          filters:
+##            - RewritePath=/api/vehicules/swagger-ui, /swagger-ui/index.html
+##
+##        - id: maintenance-service-swagger
+##          uri: http://maintenance-service:8082
+##          predicates:
+##            - Path=/api/maintenances/swagger-ui
+##          filters:
+##            - RewritePath=/api/maintenances/swagger-ui, /swagger-ui/index.html
+##
+##        - id: client-service-swagger
+##          uri: http://client-service:8080
+##          predicates:
+##            - Path=/api/clients/swagger-ui
+##          filters:
+##            - RewritePath=/api/clients/swagger-ui, /swagger-ui/index.html
+##        - id: vehicule-service
+##          uri: http://vehicule-service:8081/
+##          predicates:
+##            - Path=/api/vehicules/**
+##
+##        - id: invoice-service
+##          uri: http://invoice-service:8083/
+##          predicates:
+##            - Path=/graphql/**
+##        - id: invoice-service2
+##          uri: http://invoice-service:8083/
+##          predicates:
+##            - Path=/graphiql
+##          filters:
+##            - RewritePath=/graphiql, /graphiql?path=/graphql
+##
+##        - id: maintenance-service
+##          uri: http://maintenance-service:8082/
+##          predicates:
+##            - Path=/api/maintenances/**
+##
+##        - id: client-service
+##          uri: http://client-service:8080/
+##          predicates:
+##            - Path=/api/clients/**
+##
+#
+#
+#
+#  application:
+#    name: gateway-service
+#server:
+#  port: 8999
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: vehicule-service
+          uri: http://vehicule-service:8081/
+          predicates:
+            - Path=/VEHICULE-SERVICE/**
+          filters:
+            - RewritePath=/VEHICULE-SERVICE/(?<remaining>.*), /${remaining}
+        - id: client-service
+          uri: http://client-service:8080/
+          predicates:
+            - Path=/CLIENT-SERVICE/**
+          filters:
+            - RewritePath=/CLIENT-SERVICE/(?<remaining>.*), /${remaining}
+        - id: maintenance-service
+          uri: http://maintenance-service:8082/
+          predicates:
+            - Path=/MAINTENANCE-SERVICE/**
+          filters:
+            - RewritePath=/MAINTENANCE-SERVICE/(?<remaining>.*), /${remaining}
+        - id: invoice-service
+          uri: http://invoice-service:8083/
+          predicates:
+            - Path=/graphql/**
+        - id: invoice-service2
+          uri: http://invoice-service:8083/
+          predicates:
+            - Path=/graphiql
+          filters:
+            - RewritePath=/graphiql, /graphiql?path=/graphql
+      globalcors:
+          corsConfigurations:
+            '[/**]':
+              allowedOrigins:
+                - "*" # Swagger UI URL
+              allowedMethods:
+                - GET
+                - POST
+                - PUT
+                - DELETE
+                - OPTIONS
+              allowedHeaders:
+                - "*"
+
+    
+  application:
+    name: gateway-service
+server:
+  port: 8999
+
+
+#springdoc:
+#  api-docs:
+#    path: /v3/api-docs
+#  swagger-ui:
+#    path: /swagger-ui.html
+#  group-configurations:
+#    - group: vehicule-service
+#      paths-to-match: /VEHICULE-SERVICE/**
+#    - group: client-service
+#      paths-to-match: /CLIENT-SERVICE/**
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    urls:
+      -   name: client-service
+          url: /CLIENT-SERVICE/v3/api-docs
+      -   name: vehicule-service
+          url: /VEHICULE-SERVICE/v3/api-docs
+      -   name: maintenance-service
+          url: /MAINTENANCE-SERVICE/v3/api-docs

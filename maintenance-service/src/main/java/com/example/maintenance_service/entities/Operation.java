@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Operation {
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -24,7 +23,6 @@ public class Operation {
 
   private Long price;
 
-  @Column(nullable = false)
   private Instant updatedAt;
   
   @ManyToOne

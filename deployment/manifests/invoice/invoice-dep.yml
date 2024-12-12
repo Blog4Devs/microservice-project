@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: invoice-service
+  namespace: garage-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: invoice-service
+  template:
+    metadata:
+      labels:
+        app: invoice-service
+    spec:
+      containers:
+      - name: invoice-service
+        image: invoice-service:latest
+        ports:
+        - containerPort: 8083
+        env:
+        - name: MONGO_URI
+          valueFrom:
+            configMapKeyRef:
+              name: invoice-config
+              key: MONGO_URI
+        - name: MONGO_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: invoice-config
+              key: MONGO_DATABASE

@@ -38,7 +38,7 @@ public class Maintenance {
   @Enumerated(EnumType.STRING)
   private MaintenanceStatus status;
 
-  @OneToMany(mappedBy = "maintenance")
+  @OneToMany(mappedBy = "maintenance",cascade = CascadeType.ALL, orphanRemoval = true)
   List<Operation> operations;
 
   private Long vehicleId;

@@ -7,6 +7,7 @@ import com.commons.dtos.PageResponseDto;
 import com.commons.dtos.MaintenanceDto.OperationDto;
 import com.commons.mappers.PageResponseMapper;
 import com.example.maintenance_service.entities.Maintenance;
+import com.example.maintenance_service.entities.Operation;
 import com.commons.enums.MaintenanceStatus;
 import com.example.maintenance_service.exceptions.MaintenanceNotFoundException;
 import com.example.maintenance_service.exceptions.VehiculeNotFoundException;
@@ -14,8 +15,13 @@ import com.example.maintenance_service.mappers.MaintenanceMapper;
 import com.example.maintenance_service.mappers.MaintenanceMapper.OperationMapper;
 import com.example.maintenance_service.proxy.VehicleFeignClient;
 import com.example.maintenance_service.proxy.ClientFeignClient;
+import org.springframework.scheduling.annotation.Async;
+import feign.FeignException;
+
 
 import com.example.maintenance_service.repositories.MaintenanceRepository;
+import com.example.maintenance_service.repositories.OperationRepository;
+
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,6 +39,7 @@ public class MaintenanceServiceImpl implements MaintenanceService {
     private final MaintenanceRepository maintenanceRepository;
     private final VehicleFeignClient vehicleFeignClient;
     private final ClientFeignClient clientFeignClient;
+    private final OperationRepository operationRepository;
 
     @Value("${spring.mail.username}")
     private String fromEmail;
@@ -40,30 +47,34 @@ public class MaintenanceServiceImpl implements MaintenanceService {
     private JavaMailSender mailSender;
 
     public MaintenanceServiceImpl(
-        MaintenanceRepository maintenanceRepository, VehicleFeignClient vehicleFeignClient,ClientFeignClient clientFeignClient,JavaMailSender mailSender) {
+        MaintenanceRepository maintenanceRepository, VehicleFeignClient vehicleFeignClient,ClientFeignClient clientFeignClient,JavaMailSender mailSender, OperationRepository operationRepository) {
         this.maintenanceRepository = maintenanceRepository;
         this.vehicleFeignClient = vehicleFeignClient;
         this.mailSender=mailSender;
         this.clientFeignClient= clientFeignClient;
+        this.operationRepository = operationRepository;
     }
 
     @Override
     public MaintenanceDto scheduleMaintenance(MaintenanceDto maintenance) throws VehiculeNotFoundException {
-        Boolean vehiculeExist = vehicleFeignClient.getVehicleById(maintenance.getVehicleId());
+        try {
+            vehicleFeignClient.getVehicleById(maintenance.getVehicleId());
+            if (maintenance.getStatus() == null) {
+                maintenance.setStatus(MaintenanceStatus.PROCESSING);
+                sendEmail(maintenance.getIdProprietaire(),"subject","body");
+            }
+            Maintenance maintenance2 = MaintenanceMapper.toEntity(maintenance);
+            maintenance2.setUpdatedAt(Instant.now());
+           
+            for (Operation operation: maintenance2.getOperations()) {
+                operation.setMaintenance(maintenance2);                
+            }
 
-        if (!vehiculeExist) {
+            return MaintenanceMapper.toDto(maintenanceRepository.save(maintenance2));
+
+        } catch (FeignException.NotFound e) {
             throw new VehiculeNotFoundException(maintenance.getVehicleId());
         }
-
-        if (maintenance.getStatus() == null) {
-            maintenance.setStatus(MaintenanceStatus.PROCESSING);
-            sendEmail(maintenance.getIdProprietaire(),"subject","body");
-        }
-
-        Maintenance maintenance2 = MaintenanceMapper.toEntity(maintenance);
-        maintenance2.setUpdatedAt(Instant.now());
-        maintenanceRepository.save(maintenance2);
-        return maintenance;
     }
 
     @Override
@@ -80,15 +91,9 @@ public class MaintenanceServiceImpl implements MaintenanceService {
             maintenance.setDescription(description);
         }
         if (status != null) {
-            // TODO: make it transactional
             if (status == MaintenanceStatus.FINISHED) {
-                vehicleFeignClient.updateVehicleStatus(maintenance.getVehicleId(),
-                        MaintenanceStatus.FINISHED.toString());
-
                 maintenance.setEndTime(Instant.now());
-                
                 sendEmail(maintenance.getIdProprietaire(),"subject","body");
-
             }
             maintenance.setStatus(status);
         }
@@ -135,16 +140,15 @@ public class MaintenanceServiceImpl implements MaintenanceService {
             maintenanceRepository.findAll(pageable).map(maintenance -> MaintenanceMapper.toDto(maintenance))
         );
     }
-
+    
+    @Async
     public void sendEmail(Long maintenanceId,String subject,String body){
         ClientDTO client = clientFeignClient.getClientById(maintenanceId);
-
         SimpleMailMessage message = new SimpleMailMessage();
 
         message.setTo(client.getAddress());
         message.setSubject(subject);
         message.setText(body);
-
         message.setFrom(fromEmail);
 
         mailSender.send(message);

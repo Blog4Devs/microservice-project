@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vehicule-service
+  namespace: garage-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vehicule-service
+  template:
+    metadata:
+      labels:
+        app: vehicule-service
+    spec:
+      containers:
+        - name: vehicule-service
+          image: vinesen1/microservice-project-vehicule-service
+          ports:
+            - containerPort: 8081
+          env:
+            - name: SPRING_DATASOURCE_VEHICULE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: vehicule-config
+                  key: MYSQL_URL
+            - name: SPRING_DATASOURCE_VEHICULE_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: vehicule-config
+                  key: MYSQL_USER
+            - name: SPRING_DATASOURCE_VEHICULE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: vehicule-secret
+                  key: MYSQL_PASSWORD 
+          # resources:
+          #   requests:
+          #     memory: "128Mi"
+          #     cpu: "250m"
+          #   limits:
+          #     memory: "256Mi"
+          #     cpu: "500m"
