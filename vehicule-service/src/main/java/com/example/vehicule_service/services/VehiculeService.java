@@ -4,25 +4,25 @@ package com.example.vehicule_service.services;
 import com.commons.dtos.PageResponseDto;
 import com.commons.dtos.VehiculeDTO;
 import com.example.vehicule_service.entities.Vehicule;
+import com.example.vehicule_service.exceptions.ClientNotFoundException;
 import com.example.vehicule_service.exceptions.VehiculeNotFoundException;
 import com.example.vehicule_service.mappers.VehiculeMapper;
 import com.example.vehicule_service.repositories.VehiculeRepository;
-
+import feign.FeignException;
 import java.time.Instant;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import java.util.Optional;
+import com.example.vehicule_service.proxy.ClientFeignClient;
 
 @Service
 public class VehiculeService {
     @Autowired
     private VehiculeRepository vehiculeRepository;
-
+    @Autowired
+    private ClientFeignClient clientFeignClient;
     @Autowired
     private VehiculeMapper vehiculeMapper;
 
@@ -45,11 +45,17 @@ public class VehiculeService {
         vehiculeRepository.save(vehicule);
     }
 
-    public VehiculeDTO addVehicule(VehiculeDTO vehiculedto){
-        Vehicule vehicule=vehiculeMapper.fromVehiculeDTOToVehicule(vehiculedto);
-        vehicule.setUpdatedAt(Instant.now());
-        Vehicule vehiculesaved=vehiculeRepository.save(vehicule);
-        return vehiculeMapper.fromVehiculeToVehiculeDTO(vehiculesaved);
+    public VehiculeDTO addVehicule(VehiculeDTO vehiculedto) throws ClientNotFoundException{
+        try{
+            clientFeignClient.getClientById(vehiculedto.getClientId());
+            Vehicule vehicule=vehiculeMapper.fromVehiculeDTOToVehicule(vehiculedto);
+            vehicule.setUpdatedAt(Instant.now());
+            Vehicule vehiculesaved=vehiculeRepository.save(vehicule);
+            return vehiculeMapper.fromVehiculeToVehiculeDTO(vehiculesaved);
+        }
+        catch (FeignException.NotFound e) {
+            throw new ClientNotFoundException(vehiculedto.getClientId());
+        }
     }
     
     public VehiculeDTO getVehiculeById(Long vehiculeId) throws VehiculeNotFoundException{

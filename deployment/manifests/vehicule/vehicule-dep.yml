@@ -12,10 +12,11 @@ spec:
     metadata:
       labels:
         app: vehicule-service
+        version: v1
     spec:
       containers:
         - name: vehicule-service
-          image: vinesen1/microservice-project-vehicule-service
+          image: vinesen1/microservice-project-vehicule-service:v3
           ports:
             - containerPort: 8081
           env:

@@ -12,10 +12,11 @@ spec:
     metadata:
       labels:
         app: client-service
+        version: v1
     spec:
       containers:
         - name: client-service
-          image: vinesen1/microservice-project-client-service
+          image: vinesen1/client-service
           ports:
             - containerPort: 8080
           env:

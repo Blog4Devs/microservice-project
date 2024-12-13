@@ -13,6 +13,7 @@ spec:
     metadata:
       labels:
         app: mysql-maintenance-service
+        version: v1
     spec:
       containers:
         - name: mysql

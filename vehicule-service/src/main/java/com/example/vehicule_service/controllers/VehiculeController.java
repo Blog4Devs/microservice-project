@@ -6,13 +6,10 @@ import com.commons.dtos.VehiculeDTO;
 import com.example.vehicule_service.exceptions.VehiculeNotFoundException;
 import com.example.vehicule_service.services.VehiculeService;
 import lombok.extern.slf4j.Slf4j;
-
-import java.io.ObjectInputFilter.Status;
 import java.util.Map;
-
+import com.example.vehicule_service.exceptions.ClientNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -76,8 +73,13 @@ public class VehiculeController {
     }
 
     @PostMapping
-    public ResponseEntity<VehiculeDTO> addVehicule(@RequestBody  VehiculeDTO vehiculeDTO){
-        VehiculeDTO vehiculeDto=vehiculeService.addVehicule(vehiculeDTO);
-        return  new ResponseEntity<>(vehiculeDto, HttpStatus.CREATED);
+    public ResponseEntity<?> addVehicule(@RequestBody VehiculeDTO vehiculeDTO){
+        try{
+            VehiculeDTO vehiculeDto=vehiculeService.addVehicule(vehiculeDTO);
+            return new ResponseEntity<>(vehiculeDto, HttpStatus.CREATED);
+        }
+        catch (ClientNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 }

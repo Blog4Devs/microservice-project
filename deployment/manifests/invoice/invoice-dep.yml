@@ -12,10 +12,11 @@ spec:
     metadata:
       labels:
         app: invoice-service
+        version: v1
     spec:
       containers:
       - name: invoice-service
-        image: invoice-service:latest
+        image: vinesen1/microservice-project-invoice-service
         ports:
         - containerPort: 8083
         env:

@@ -12,6 +12,7 @@ spec:
     metadata:
       labels:
         app: maintenance-service
+        version: v1
     spec:
       containers:
         - name: maintenance-service

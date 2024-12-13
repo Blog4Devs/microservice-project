@@ -14,7 +14,7 @@ spec:
         app: gateway-service
     spec:
       containers:
-      - name: gateway-service
-        image: gateway:latest
-        ports:
-        - containerPort: 8999
+        - name: gateway-service
+          image: vinesen1/microservice-project-gateway
+          ports:
+            - containerPort: 8999
