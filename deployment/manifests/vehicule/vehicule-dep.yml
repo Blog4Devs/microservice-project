@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: vehicule-service
-          image: vinesen1/microservice-project-vehicule-service:v3
+          image: vinesen1/microservice-project-vehicule-service:v4
           ports:
             - containerPort: 8081
           env:

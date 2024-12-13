@@ -125,7 +125,6 @@ services:
   gateway:
      build:
        context: ./Gateway
-      
      container_name: gateway_service
      networks:
        - app_network

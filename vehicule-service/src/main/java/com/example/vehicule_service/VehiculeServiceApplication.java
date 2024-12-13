@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.servers.Server;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
 @OpenAPIDefinition(
@@ -16,6 +17,7 @@ import io.swagger.v3.oas.annotations.servers.Server;
     ),
     servers = @Server(url = "/VEHICULE-SERVICE", description = "VEHICULE Server URL")
 )
+@EnableFeignClients
 public class VehiculeServiceApplication {
 
 	public static void main(String[] args) {
