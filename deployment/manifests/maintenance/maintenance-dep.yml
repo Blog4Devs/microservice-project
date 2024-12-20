@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: maintenance-service
+  namespace: garage-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: maintenance-service
+  template:
+    metadata:
+      labels:
+        app: maintenance-service
+        version: v1
+    spec:
+      containers:
+        - name: maintenance-service
+          image: vinesen1/microservice-project-maintenance-service
+          ports:
+            - containerPort: 8082
+          env:
+            - name: SPRING_DATASOURCE_MAINTENANCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: maintenance-config
+                  key: MYSQL_URL
+            - name: SPRING_DATASOURCE_MAINTENANCE_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: maintenance-config
+                  key: MYSQL_USER
+            - name: SPRING_DATASOURCE_MAINTENANCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: maintenance-secret
+                  key: MYSQL_PASSWORD 
+          # resources:
+          #   requests:
+          #     memory: "128Mi"
+          #     cpu: "250m"
+          #   limits:
+          #     memory: "256Mi"
+          #     cpu: "500m"

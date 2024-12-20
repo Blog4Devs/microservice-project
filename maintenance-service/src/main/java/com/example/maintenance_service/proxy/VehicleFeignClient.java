@@ -2,13 +2,11 @@ package com.example.maintenance_service.proxy;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import com.commons.dtos.VehiculeDTO;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "vehicle-service")
+@FeignClient(name = "vehicule-service", url = "http://vehicule-service:8081")
 public interface VehicleFeignClient {
-  @GetMapping("/vehicles/{id}")
-  Boolean getVehicleById(@PathVariable Long id);
-
-  @GetMapping("/vehicles/{id}")
-  Boolean updateVehicleStatus(@PathVariable Long id, String status);
+  @GetMapping("/api/vehicules/{id}")
+  VehiculeDTO getVehicleById(@PathVariable Long id);
 }

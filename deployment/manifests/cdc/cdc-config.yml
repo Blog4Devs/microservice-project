@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cdc-config
+  namespace: garage-ns
+data:
+  CLIENT_DB_URL: jdbc:mysql://mysql-client-service:3306/client_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+  VEHICLE_DB_URL: jdbc:mysql://mysql-vehicule-service:3306/vehicule_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+  MAINTENANCE_DB_URL: jdbc:mysql://mysql-maintenance-service:3306/maintenance_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+  MONGO_URI: mongodb://admin:password@mongodb:27017/invoice_db?authSource=admin
+  MONGO_DATABASE: invoice_db
+  CLIENT_DB_USERNAME: user
+  VEHICLE_DB_USERNAME: user
+  MAINTENANCE_DB_USERNAME: user

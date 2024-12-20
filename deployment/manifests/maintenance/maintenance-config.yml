@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: maintenance-config
+  namespace: garage-ns
+data:
+  MYSQL_USER: user
+  MYSQL_DATABASE_MAINTENANCE: maintenance_db
+  MYSQL_URL: jdbc:mysql://mysql-maintenance-service:3306/maintenance_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true

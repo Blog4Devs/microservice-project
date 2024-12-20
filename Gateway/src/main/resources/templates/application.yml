@@ -1,0 +1,59 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        # - id: vehicule-service-swagger
+        #   uri: http://vehicule-service:8081
+        #   predicates:
+        #     - Path=/api/vehicules/swagger-ui
+        #   filters:
+        #     - RewritePath=/api/vehicules/swagger-ui, /swagger-ui/index.html
+
+        # - id: maintenance-service-swagger
+        #   uri: http://maintenance-service:8082
+        #   predicates:
+        #     - Path=/api/maintenances/swagger-ui
+        #   filters:
+        #     - RewritePath=/api/maintenances/swagger-ui, /swagger-ui/index.html
+
+        # - id: client-service-swagger
+        #   uri: http://client-service:8080
+        #   predicates:
+        #     - Path=/api/clients/swagger-ui
+        #   filters:
+        #     - RewritePath=/api/clients/swagger-ui, /swagger-ui/index.html
+        - id: vehicule-service
+          uri: http://vehicule-service:8081/
+          predicates:
+            - Path=/vehicule-service/**
+                filters:
+            - RewritePath=/vehicule-service, /
+
+        - id: invoice-service
+          uri: http://invoice-service:8083/
+          predicates:
+            - Path=/graphql/**
+
+        - id: invoice-service2
+          uri: http://invoice-service:8083/
+          predicates:
+            - Path=/graphiql
+          filters:
+            - RewritePath=/graphiql, /graphiql?path=/graphql
+
+        - id: maintenance-service
+          uri: http://maintenance-service:8082/
+          predicates:
+            - Path=/api/maintenances/**
+
+        - id: client-service
+          uri: http://client-service:8080/
+          predicates:
+            - Path=/api/clients/**
+      
+
+
+  application:
+    name: gateway-service
+server:
+  port: 8999

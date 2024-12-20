@@ -1,0 +1,62 @@
+type Query {
+    getInvoiceById(id: ID!): Invoice
+    getInvoices(page: Int, size: Int): PageResponseDto
+}
+
+type PageResponseDto {
+    content: [Invoice]
+    currentPage: Int
+    pageSize: Int
+    totalPages: Int
+    totalElement: Int
+}
+
+type Invoice {
+    id: ID
+    client: Client
+    vehicules: [Vehicule]
+    maintenances: [Maintenance]
+    timestamp: String
+}
+
+type Client {
+    id: ID
+    name: String
+    address: String
+    phone: String
+    email: String
+    cin: String
+}
+
+type Vehicule {
+    id: ID
+    vin: String
+    numMatriculation: String
+    marque: String
+    annee: Int
+    color: String
+    kilometrage: Int
+    carburant: String
+    dateAchat: String
+    clientId: ID
+    isDelivered: Boolean
+}
+
+type Maintenance {
+    id: ID
+    startTime: String
+    predictedEndTime: String
+    endTime: String
+    description: String
+    status: String
+    operations: [Operation]
+    vehicleId: ID
+    idProprietaire: ID
+    isPaid: Boolean
+}
+
+type Operation {
+    id: ID
+    description: String
+    price: Float
+}

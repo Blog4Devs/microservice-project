@@ -1,0 +1,278 @@
+# MONGO
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: mongodb
+  namespace: garage-ns
+spec:
+  hosts:
+  - mongodb
+  http:
+  - route:
+    - destination:
+        host: mongodb
+        subset: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: mongodb
+  namespace: garage-ns
+spec:
+  host: mongodb
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+      name: mongodb
+---
+# INVOICE 
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: invoice-service
+  namespace: garage-ns
+spec:
+  hosts:
+  - invoice-service
+  http:
+  - route:
+    - destination:
+        host: invoice-service
+        subset: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: invoice-service
+  namespace: garage-ns
+spec:
+  host: invoice-service
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+      name: invoice-service
+---
+# VEHICULE
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: vehicule-service
+  namespace: garage-ns
+spec:
+  hosts:
+  - vehicule-service
+  http:
+  - route:
+    - destination:
+        host: vehicule-service
+        subset: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: vehicule-service
+  namespace: garage-ns
+spec:
+  host: vehicule-service
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+      name: vehicule-service
+---
+# CLIENT
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: client-service
+  namespace: garage-ns
+spec:
+  hosts:
+  - client-service
+  http:
+  - route:
+    - destination:
+        host: client-service
+        subset: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: client-service
+  namespace: garage-ns
+spec:
+  host: client-service
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+      name: client-service
+---
+# MAINTENANCE
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: maitenance-service
+  namespace: garage-ns
+spec:
+  hosts:
+  - maitenance-service
+  http:
+  - route:
+    - destination:
+        host: maitenance-service
+        subset: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: maitenance-service
+  namespace: garage-ns
+spec:
+  host: maitenance-service
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+      name: maitenance-service
+---
+# CDC
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: cdc-service
+  namespace: garage-ns
+spec:
+  hosts:
+  - cdc-service
+  http:
+  - route:
+    - destination:
+        host: cdc-service
+        subset: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: cdc-service
+  namespace: garage-ns
+spec:
+  host: cdc-service
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+      name: cdc-service
+---
+# VEHICULE-DB
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: mysql-vehicule-service
+  namespace: garage-ns
+spec:
+  hosts:
+  - mysql-vehicule-service
+  http:
+  - route:
+    - destination:
+        host: mysql-vehicule-service
+        subset: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: mysql-vehicule-service
+  namespace: garage-ns
+spec:
+  host: mysql-vehicule-service
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+      name: mysql-vehicule-service
+---
+# CLIENT-DB
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: mysql-client-service
+  namespace: garage-ns
+spec:
+  hosts:
+  - mysql-client-service
+  http:
+  - route:
+    - destination:
+        host: mysql-client-service
+        subset: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: mysql-client-service
+  namespace: garage-ns
+spec:
+  host: mysql-client-service
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+      name: mysql-client-service
+---
+# MAITENANCE-DB
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: mysql-maitenance-service
+  namespace: garage-ns
+spec:
+  hosts:
+  - mysql-maitenance-service
+  http:
+  - route:
+    - destination:
+        host: mysql-maitenance-service
+        subset: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: mysql-maitenance-service
+  namespace: garage-ns
+spec:
+  host: mysql-maitenance-service
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+      name: mysql-maitenance-service

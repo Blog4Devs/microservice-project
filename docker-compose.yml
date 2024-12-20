@@ -1,0 +1,192 @@
+version: "3.8"
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    networks:
+      - app_network
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - mongodb_data:/data/db
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    networks:
+      - app_network
+    ports:
+      - 8090:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: user
+      ME_CONFIG_MONGODB_ADMINPASSWORD: password
+      ME_CONFIG_MONGODB_URL: mongodb://admin:password@mongodb:27017
+      ME_CONFIG_BASICAUTH: false
+
+  invoice-service:
+     build:
+       context: ./invoice-service
+       network: host
+     networks:
+       - app_network
+     container_name: invoice_service
+     ports:
+       - "8083:8083"
+     environment:
+        MONGO_URI: mongodb://admin:password@mongodb:27017/invoice_db?authSource=admin
+        MONGO_DATABASE: invoice_db
+     depends_on:
+       - mongodb
+
+  mysql_vehicule_service:
+     image: mysql
+     container_name: mysql_instance2
+     networks:
+       - app_network
+     restart: always
+     ports:
+       - "3307:3306"
+     environment:
+       MYSQL_ROOT_PASSWORD: password
+       MYSQL_DATABASE: vehicule_db
+       MYSQL_USER: user
+       MYSQL_PASSWORD: password
+     volumes:
+       - mysql_data2:/var/lib/mysql
+
+  mysql_client_service:
+     image: mysql
+     container_name: mysql_instance1
+     networks:
+       - app_network
+     restart: always
+     ports:
+       - "3308:3306"
+     environment:
+       MYSQL_ROOT_PASSWORD: password
+       MYSQL_DATABASE: client_db
+       MYSQL_USER: user
+       MYSQL_PASSWORD: password
+     volumes:
+       - mysql_data1:/var/lib/mysql
+
+  mysql_maintenance_service:
+     image: mysql
+     container_name: mysql_instance3
+     networks:
+       - app_network
+     restart: always
+     ports:
+       - "3309:3306"
+     environment:
+       MYSQL_ROOT_PASSWORD: password
+       MYSQL_DATABASE: maintenance_db
+       MYSQL_USER: user
+       MYSQL_PASSWORD: password
+     volumes:
+       - mysql_data3:/var/lib/mysql
+
+  vehicule-service:
+     build:
+       context: ./vehicule-service
+       network: "host"
+     container_name: vehicule-service
+     networks:
+       - app_network
+     ports:
+       - "8089:8081"
+     environment:
+       SPRING_DATASOURCE_VEHICULE_URL: jdbc:mysql://mysql_vehicule_service:3306/vehicule_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+       SPRING_DATASOURCE_VEHICULE_USERNAME: user
+       SPRING_DATASOURCE_VEHICULE_PASSWORD: password
+     depends_on:
+       - mysql_vehicule_service
+
+  client-service:
+     build:
+       context: ./client-service
+       network: "host"
+     container_name: client_service
+     networks:
+       - app_network
+     ports:
+       - "8085:8080"
+     environment:
+       SPRING_DATASOURCE_CLIENT_URL: jdbc:mysql://mysql_client_service:3306/client_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+       SPRING_DATASOURCE_CLIENT_USERNAME: user
+       SPRING_DATASOURCE_CLIENT_PASSWORD: password
+     depends_on:
+       - mysql_client_service
+     
+  gateway:
+     build:
+       context: ./Gateway
+     container_name: gateway_service
+     networks:
+       - app_network
+     ports:
+       - "8999:8999"
+    
+  maintenance-service:
+     build:
+       context: ./maintenance-service
+       network: "host"
+     container_name: maintenance_service
+     networks:
+       - app_network
+     ports:
+       - "8086:8082"
+     environment:
+       SPRING_DATASOURCE_MAINTENANCE_URL: jdbc:mysql://mysql_maintenance_service:3306/maintenance_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+       SPRING_DATASOURCE_MAINTENANCE_USERNAME: user
+       SPRING_DATASOURCE_MAINTENANCE_PASSWORD: password
+     depends_on:
+       - mysql_maintenance_service
+
+  cdc-service:
+    build:
+      context: ./cdc-service
+      network: host
+    networks:
+      - app_network
+    ports:
+      - "8088:8084"
+    environment:
+      CLIENT_DB_URL: jdbc:mysql://mysql_client_service:3306/client_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      CLIENT_DB_USERNAME: user
+      CLIENT_DB_PASSWORD: password
+
+      VEHICLE_DB_URL: jdbc:mysql://mysql_vehicule_service:3306/vehicule_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      VEHICLE_DB_USERNAME: user
+      VEHICLE_DB_PASSWORD: password
+
+      MAINTENANCE_DB_URL: jdbc:mysql://mysql_maintenance_service:3306/maintenance_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      MAINTENANCE_DB_USERNAME: user
+      MAINTENANCE_DB_PASSWORD: password
+
+      MONGO_URI: mongodb://admin:password@mongodb:27017/invoice_db?authSource=admin
+      MONGO_DATABASE: invoice_db
+    volumes:
+       - cdc-data:/home
+
+    depends_on:
+      - mongodb
+      - mysql_maintenance_service
+      - mysql_vehicule_service
+      - mysql_client_service
+
+networks:
+  app_network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
+  mysql_data1:
+  mysql_data2:
+  mysql_data3:
+  nexus-data:
+  cdc-data:

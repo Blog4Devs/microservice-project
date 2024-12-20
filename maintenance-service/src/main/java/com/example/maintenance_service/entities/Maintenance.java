@@ -1,6 +1,7 @@
 package com.example.maintenance_service.entities;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -10,6 +11,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import java.time.Instant;
 import java.util.List;
+
+import com.commons.enums.MaintenanceStatus;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,8 +38,13 @@ public class Maintenance {
   @Enumerated(EnumType.STRING)
   private MaintenanceStatus status;
 
-  @OneToMany(cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "maintenance",cascade = CascadeType.ALL, orphanRemoval = true)
   List<Operation> operations;
 
   private Long vehicleId;
+  private Long idProprietaire;
+  private boolean isPaid;
+
+  @Column(nullable = false)
+  private Instant updatedAt;
 }

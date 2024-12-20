@@ -1,13 +1,13 @@
 package com.example.vehicule_service.entities;
 
-import com.example.vehicule_service.enums.Carburant;
-import com.example.vehicule_service.enums.VehiculeState;
+import com.commons.enums.Carburant;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.Instant;
 
 @Data
 @Entity
@@ -16,18 +16,18 @@ import java.util.Date;
 public class Vehicule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idvehicule;
+    private Long id;
     private String vin;
-    private String num_matriculation;
+    private String numMatriculation;
     private String marque;
     private int annee;
     private String color;
     private int kilometrage;
     @Enumerated(EnumType.STRING)
     private Carburant carburant;
-    private Date date_achat;
-    private Long idproprietaire;
-    @Enumerated(EnumType.STRING)
-    private VehiculeState vehiculeState;
-
+    private Instant dateAchat;
+    private Long clientId;
+    private boolean isDelivered;
+    @Column(nullable = false)
+    private Instant updatedAt;
 }

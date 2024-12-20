@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-service
+  namespace: garage-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: client-service
+  template:
+    metadata:
+      labels:
+        app: client-service
+        version: v1
+    spec:
+      containers:
+        - name: client-service
+          image: vinesen1/microservice-project-client-service:v5  
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_CLIENT_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: client-config
+                  key: MYSQL_URL
+            - name: SPRING_DATASOURCE_CLIENT_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: client-config
+                  key: MYSQL_USER
+            - name: SPRING_DATASOURCE_CLIENT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: client-secret
+                  key: MYSQL_PASSWORD
+          # resources:
+          #   requests:
+          #     memory: "128Mi"
+          #     cpu: "250m"
+          #   limits:
+          #     memory: "256Mi"
+          #     cpu: "500m"

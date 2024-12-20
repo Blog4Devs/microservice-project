@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql-maintenance-service
+  namespace: garage-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql-maintenance-service
+  serviceName: "mysql-maintenance-service"
+  template:
+    metadata:
+      labels:
+        app: mysql-maintenance-service
+        version: v1
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:latest
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: maintenance-config
+                  key: MYSQL_USER
+            - name: MYSQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: maintenance-config
+                  key: MYSQL_DATABASE_MAINTENANCE
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: maintenance-secret
+                  key: MYSQL_PASSWORD 
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: maintenance-secret
+                  key: MYSQL_PASSWORD 
+          volumeMounts:
+            - name: mysql-maintenance-data
+              mountPath: /var/lib/mysql
+  volumeClaimTemplates:
+    - metadata:
+        name: mysql-maintenance-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-maintenance-service
+  namespace: garage-ns
+spec:
+  ports:
+    - port: 3306
+      targetPort: 3306
+  clusterIP: None
+  selector:
+    app: mysql-maintenance-service

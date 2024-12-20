@@ -1,0 +1,28 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: frontend
+  namespace: garage-ns
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - garage-gateway
+  http:
+  - route:
+    - destination:
+        host: frontend
+        subset: v2
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: frontend
+  namespace: garage-ns
+spec:
+  host: frontend
+  subsets:
+  - name: v2
+    labels:
+      version: v2
+      name: frontend

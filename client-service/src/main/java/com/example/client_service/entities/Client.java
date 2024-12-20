@@ -1,5 +1,7 @@
 package com.example.client_service.entities;
 
+import java.time.Instant;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,4 +28,11 @@ public class Client {
 
     @Column(nullable = false, unique = true)
     private String email;
+    
+    @Column(nullable = false, unique = true)
+    private String cin;
+    
+    @Column(nullable = false)
+    private Instant updatedAt ;
+    
 }

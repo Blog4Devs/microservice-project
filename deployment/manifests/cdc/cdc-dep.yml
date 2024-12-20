@@ -1,0 +1,116 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cdc-service
+  namespace: garage-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cdc-service
+  template:
+    metadata:
+      labels:
+        app: cdc-service
+        version: v1
+    spec:
+      containers:
+        - name: cdc-service
+          image: vinesen1/microservice-project-cdc-service
+          ports:
+            - containerPort: 8084
+          env:
+          - name: CLIENT_DB_URL
+            valueFrom:
+              configMapKeyRef:
+                name: cdc-config
+                key: CLIENT_DB_URL
+          - name: VEHICLE_DB_URL
+            valueFrom:
+              configMapKeyRef:
+                name: cdc-config
+                key: VEHICLE_DB_URL
+          - name: MAINTENANCE_DB_URL
+            valueFrom:
+              configMapKeyRef:
+                name: cdc-config
+                key: MAINTENANCE_DB_URL
+          - name: MONGO_URI
+            valueFrom:
+              configMapKeyRef:
+                name: cdc-config
+                key: MONGO_URI
+          - name: MONGO_DATABASE
+            valueFrom:
+              configMapKeyRef:
+                name: cdc-config
+                key: MONGO_DATABASE
+          - name: CLIENT_DB_USERNAME
+            valueFrom:
+              configMapKeyRef:
+                name: cdc-config
+                key: CLIENT_DB_USERNAME
+          - name: CLIENT_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: cdc-secret
+                key: CLIENT_DB_PASSWORD
+          - name: VEHICLE_DB_USERNAME
+            valueFrom:
+              configMapKeyRef:
+                name: cdc-config
+                key: VEHICLE_DB_USERNAME
+          - name: VEHICLE_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: cdc-secret
+                key: VEHICLE_DB_PASSWORD
+          - name: MAINTENANCE_DB_USERNAME
+            valueFrom:
+              configMapKeyRef:
+                name: cdc-config
+                key: MAINTENANCE_DB_USERNAME
+          - name: MAINTENANCE_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: cdc-secret
+                key: MAINTENANCE_DB_PASSWORD
+          # env:
+          #   - name: CLIENT_DB_USERNAME
+          #     valueFrom:
+          #       secretKeyRef:
+          #         name: cdc-secret 
+          #         key: CLIENT_DB_USERNAME
+          #   - name: CLIENT_DB_PASSWORD
+          #     valueFrom:
+          #       secretKeyRef:
+          #         name: cdc-secret
+          #         key: CLIENT_DB_PASSWORD
+          #   - name: VEHICLE_DB_USERNAME
+          #     valueFrom:
+          #       secretKeyRef:
+          #         name: cdc-secret
+          #         key: VEHICLE_DB_USERNAME
+          #   - name: VEHICLE_DB_PASSWORD
+          #     valueFrom:
+          #       secretKeyRef:
+          #         name: cdc-secret
+          #         key: VEHICLE_DB_PASSWORD
+          #   - name: MAINTENANCE_DB_USERNAME
+          #     valueFrom:
+          #       secretKeyRef:
+          #         name: cdc-secret
+          #         key: MAINTENANCE_DB_USERNAME
+          #   - name: MAINTENANCE_DB_PASSWORD
+          #     valueFrom:
+          #       secretKeyRef:
+          #         name: cdc-secret
+          #         key: MAINTENANCE_DB_PASSWORD
+            
+          # resources:
+          #   requests:
+          #     memory: "128Mi"
+          #     cpu: "250m"
+          #   limits:
+          #     memory: "256Mi"
+          #     cpu: "500m"

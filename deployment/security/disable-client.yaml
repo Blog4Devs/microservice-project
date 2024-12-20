@@ -1,0 +1,55 @@
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: client-service
+  namespace: garage-ns
+spec:
+  selector:
+    matchLabels:
+      name: client-service
+  mtls:
+    mode: DISABLE
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: client-service
+  namespace: garage-ns
+spec:
+  host: client-service
+  trafficPolicy:
+    tls:
+      mode: DISABLE
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+
+
+---
+# apiVersion: security.istio.io/v1beta1
+# kind: PeerAuthentication
+# metadata:
+#   name: maitenance-service
+#   namespace: garage-ns
+# spec:
+#   selector:
+#     matchLabels:
+#       name: maitenance-service
+#   mtls:
+#     mode: DISABLE
+# ---
+# apiVersion: networking.istio.io/v1alpha3
+# kind: DestinationRule
+# metadata:
+#   name: maitenance-service
+#   namespace: garage-ns
+# spec:
+#   host: maitenance-service
+#   trafficPolicy:
+#     tls:
+#       mode: DISABLE
+#   subsets:
+#   - name: v1
+#     labels:
+      # version: v1

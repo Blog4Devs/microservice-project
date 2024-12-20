@@ -1,49 +1,99 @@
 package com.example.vehicule_service.services;
 
-import com.example.vehicule_service.dtos.VehiculeDTO;
-import com.example.vehicule_service.dtos.VehiculeDTOResponce;
+
+import com.commons.dtos.PageResponseDto;
+import com.commons.dtos.VehiculeDTO;
 import com.example.vehicule_service.entities.Vehicule;
-import com.example.vehicule_service.enums.VehiculeState;
+import com.example.vehicule_service.exceptions.ClientNotFoundException;
+import com.example.vehicule_service.exceptions.VehiculeNotFoundException;
 import com.example.vehicule_service.mappers.VehiculeMapper;
 import com.example.vehicule_service.repositories.VehiculeRepository;
+import feign.FeignException;
+import java.time.Instant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import com.example.vehicule_service.proxy.ClientFeignClient;
 
 @Service
 public class VehiculeService {
     @Autowired
     private VehiculeRepository vehiculeRepository;
-
+    @Autowired
+    private ClientFeignClient clientFeignClient;
     @Autowired
     private VehiculeMapper vehiculeMapper;
 
-
-    public VehiculeDTOResponce<Vehicule> get_Vehicule(int page, int size, Long id_proprietaire) {
+    public PageResponseDto<VehiculeDTO> getVehicule(int page, int size, Long clientId) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Vehicule> vehiculepage ;
-        if (id_proprietaire!=null) {
-            vehiculepage = vehiculeRepository.findByIdproprietaire(id_proprietaire, pageable);
+        if (clientId!=null) {
+            vehiculepage = vehiculeRepository.findByClientId(clientId, pageable);
         } else {
             vehiculepage = vehiculeRepository.findAll(pageable);
         }
-
         return vehiculeMapper.toPageResponseDto(vehiculepage);
     }
 
-public void update_vehicule_status(Long id_vehicule,String state){
-        Vehicule vehicule=vehiculeRepository.findByIdvehicule(id_vehicule);
-        vehicule.setVehiculeState(VehiculeState.valueOf(state));
+    public void updateVehiculeStatus(Long vehiculeId,boolean isDelivered) throws VehiculeNotFoundException{
+        Vehicule vehicule=vehiculeRepository.findById(vehiculeId).orElseThrow(
+            () ->new VehiculeNotFoundException("Vehicule with ID " + vehiculeId + " not found")
+        );
+        vehicule.setDelivered(isDelivered);
         vehiculeRepository.save(vehicule);
-
-}
-public Long add_vehicule(VehiculeDTO vehiculedto){
-Vehicule vehicule=vehiculeMapper.from_vehiculeDTO_to_vehicule(vehiculedto);
-Vehicule vehiculesaved=vehiculeRepository.save(vehicule);
-    return vehiculesaved.getIdvehicule();
     }
 
+    public VehiculeDTO addVehicule(VehiculeDTO vehiculedto) throws ClientNotFoundException{
+        try{
+            clientFeignClient.getClientById(vehiculedto.getClientId());
+            Vehicule vehicule=vehiculeMapper.fromVehiculeDTOToVehicule(vehiculedto);
+            vehicule.setUpdatedAt(Instant.now());
+            Vehicule vehiculesaved=vehiculeRepository.save(vehicule);
+            return vehiculeMapper.fromVehiculeToVehiculeDTO(vehiculesaved);
+        }
+        catch (FeignException.NotFound e) {
+            throw new ClientNotFoundException(vehiculedto.getClientId());
+        }
+    }
+    
+    public VehiculeDTO getVehiculeById(Long vehiculeId) throws VehiculeNotFoundException{
+        Vehicule vehicule=vehiculeRepository.findById(vehiculeId).orElseThrow(
+                () ->new VehiculeNotFoundException("Vehicule with ID " + vehiculeId + " not found")
+        );
+        return vehiculeMapper.fromVehiculeToVehiculeDTO(vehicule);
+    }
 
+    public VehiculeDTO updateVehicule(Long vehiculeId, VehiculeDTO updatedVehicule) throws VehiculeNotFoundException{
+        Vehicule vehicule =  vehiculeRepository.findById(vehiculeId).orElseThrow(() ->new VehiculeNotFoundException("Vehicule with ID " + vehiculeId + " not found")); 
+        if (updatedVehicule.getVin() != null) {
+            vehicule.setVin(updatedVehicule.getVin());
+        }
+        if (updatedVehicule.getNumMatriculation() != null) {
+            vehicule.setNumMatriculation(updatedVehicule.getNumMatriculation());
+        }
+        if (updatedVehicule.getMarque() != null) {
+            vehicule.setMarque(updatedVehicule.getMarque());
+        }
+        if (updatedVehicule.getAnnee() != 0) {
+            vehicule.setAnnee(updatedVehicule.getAnnee());
+        }
+        if (updatedVehicule.getColor() != null) {
+            vehicule.setColor(updatedVehicule.getColor());
+        }
+        if (updatedVehicule.getKilometrage() != 0) {
+            vehicule.setKilometrage(updatedVehicule.getKilometrage());
+        }
+        if (updatedVehicule.getCarburant() != null) {
+            vehicule.setCarburant(updatedVehicule.getCarburant());
+        }
+        if (updatedVehicule.getDateAchat() != null) {
+            vehicule.setDateAchat(updatedVehicule.getDateAchat());
+        }
+        vehicule.setDelivered(updatedVehicule.isDelivered());
+        vehicule.setUpdatedAt(Instant.now()); 
+        vehiculeRepository.save(vehicule);
+        return vehiculeMapper.fromVehiculeToVehiculeDTO(vehicule);  
+    }  
 }

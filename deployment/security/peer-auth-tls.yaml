@@ -1,0 +1,126 @@
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: default
+  namespace: garage-ns
+spec:
+  mtls:
+    mode: STRICT
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: client-service
+  namespace: garage-ns
+spec:
+  selector:
+    matchLabels:
+      name: client-service
+      version: v1
+  mtls:
+    mode: STRICT
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: mongodb
+  namespace: garage-ns
+spec:
+  selector:
+    matchLabels:
+      name: mongodb
+      version: v1
+  mtls:
+    mode: STRICT
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: invoice-service
+  namespace: garage-ns
+spec:
+  selector:
+    matchLabels:
+      name: invoice-service
+      version: v1
+  mtls:
+    mode: STRICT
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: vehicule-service
+  namespace: garage-ns
+spec:
+  selector:
+    matchLabels:
+      name: vehicule-service
+      version: v1
+  mtls:
+    mode: STRICT
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: maitenance-service
+  namespace: garage-ns
+spec:
+  selector:
+    matchLabels:
+      name: maitenance-service
+      version: v1
+  mtls:
+    mode: STRICT
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: cdc-service
+  namespace: garage-ns
+spec:
+  selector:
+    matchLabels:
+      name: cdc-service
+      version: v1
+  mtls:
+    mode: STRICT
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: mysql-maitenance-service
+  namespace: garage-ns
+spec:
+  selector:
+    matchLabels:
+      name: mysql-maitenance-service
+      version: v1
+  mtls:
+    mode: STRICT
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: mysql-vehicule-service
+  namespace: garage-ns
+spec:
+  selector:
+    matchLabels:
+      name: mysql-vehicule-service
+      version: v1
+  mtls:
+    mode: STRICT
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: mysql-client-service
+  namespace: garage-ns
+spec:
+  selector:
+    matchLabels:
+      name: mysql-client-service
+      version: v1
+  mtls:
+    mode: STRICT
+---

@@ -1,0 +1,15 @@
+.navbar {
+  background: rgba(0, 0, 0, 0.2); 
+  display: flex;
+  margin: auto;
+  color: #ffffff; 
+  font-weight: bold;
+  backdrop-filter: blur(10px); 
+  border-radius: 10px; 
+  padding: 10px 20px; 
+}
+.button {
+  background: linear-gradient(to right, #7f00ff, #e100ff);
+  font-weight: bold;
+  color: black;
+}
