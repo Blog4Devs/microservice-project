@@ -1,0 +1,217 @@
+{
+  "invoices": [
+    {
+      "id": 1,
+      "client": {
+        "id": 101,
+        "name": "John Doe",
+        "address": "123 Main Street",
+        "phone": "+123456789",
+        "email": "johndoe@example.com",
+        "cin": "AB123456"
+      },
+      "vehicules": [
+        {
+          "id": 201,
+          "vin": "1HGCM82633A123456",
+          "numMatriculation": "XYZ123",
+          "marque": "Toyota",
+          "annee": 2020,
+          "color": "Red",
+          "kilometrage": 50000,
+          "carburant": "Petrol",
+          "dateAchat": "2020-01-15T10:00:00Z",
+          "clientId": 101,
+          "isDelivered": true
+        },
+        {
+          "id": 201,
+          "vin": "1HGCM82633A123456",
+          "numMatriculation": "XYZ123",
+          "marque": "Toyota",
+          "annee": 2020,
+          "color": "Red",
+          "kilometrage": 50000,
+          "carburant": "Petrol",
+          "dateAchat": "2020-01-15T10:00:00Z",
+          "clientId": 101,
+          "isDelivered": true
+        }
+      ],
+      "maintenances": [
+        {
+          "id": 301,
+          "startTime": "2023-12-01T08:00:00Z",
+          "predictedEndTime": "2023-12-01T12:00:00Z",
+          "endTime": "2023-12-01T11:30:00Z",
+          "description": "Oil change and tire rotation",
+          "status": "COMPLETED",
+          "operations": [
+            {
+              "id": 401,
+              "description": "Oil change",
+              "price": 50
+            },
+            {
+              "id": 402,
+              "description": "Tire rotation",
+              "price": 30
+            }
+          ],
+          "vehicleId": 201,
+          "idProprietaire": 101,
+          "isPaid": true
+        },
+        {
+          "id": 301,
+          "startTime": "2023-12-01T08:00:00Z",
+          "predictedEndTime": "2023-12-01T12:00:00Z",
+          "endTime": "2023-12-01T11:30:00Z",
+          "description": "Oil change and tire rotation",
+          "status": "COMPLETED",
+          "operations": [
+            {
+              "id": 401,
+              "description": "Oil change",
+              "price": 50
+            },
+            {
+              "id": 402,
+              "description": "Tire rotation",
+              "price": 30
+            }
+          ],
+          "vehicleId": 201,
+          "idProprietaire": 101,
+          "isPaid": true
+        }
+      ],
+      "timestamp": "2023-12-01T07:00:00Z"
+    }
+  ],
+
+  "clients": [
+    {
+      "id": "1",
+      "name": "John Doe",
+      "address": "123 Main St, Cityville",
+      "phone": "123-456-7890",
+      "email": "john.doe@example.com",
+      "cin": "CIN12345"
+    },
+    {
+      "id": "2",
+      "name": "Jane Smith",
+      "address": "456 Oak Ave, Townsville",
+      "phone": "987-654-3210",
+      "email": "jane.smith@example.com",
+      "cin": "CIN54321"
+    },
+    {
+      "id": "09d0",
+      "name": "aaa",
+      "address": "aaa",
+      "phone": "aa",
+      "email": "a@gmail.com",
+      "cin": "CIN12345"
+    },
+    {
+      "id": "32c4",
+      "name": "ismail",
+      "address": "ismail",
+      "phone": "0635",
+      "email": "ism@gmail.com",
+      "cin": "GM230789"
+    }
+  ],
+  "vehicles": [
+    {
+      "id": "1",
+      "vin": "1HGBH41JXMN109186",
+      "numMatriculation": "ABC-123",
+      "marque": "Toyota",
+      "annee": 2020,
+      "color": "Red",
+      "kilometrage": 25000,
+      "carburant": "ESSENCE",
+      "dateAchat": "2023-01-15T10:00:00Z",
+      "cin": "CIN12345",
+      "clientId": "1",
+      "isDelivered": true
+    },
+    {
+      "id": "2",
+      "vin": "2FTHF26G3HC123456",
+      "numMatriculation": "XYZ-456",
+      "marque": "Ford",
+      "annee": 2019,
+      "color": "Blue",
+      "kilometrage": 45000,
+      "carburant": "DIESEL",
+      "dateAchat": "2022-08-10T14:00:00Z",
+      "cin": "CIN12345",
+      "clientId": "1",
+      "isDelivered": false
+    }
+  ],
+  "maintenances": [
+    {
+      "id": "1",
+      "startTime": "2024-01-10T09:00:00Z",
+      "predictedEndTime": "2024-01-15T17:00:00Z",
+      "endTime": "2024-01-15T16:30:00Z",
+      "description": "Oil change and tire rotation",
+      "status": "FINISHED",
+      "operations": [
+        {
+          "id": 1,
+          "description": "Oil change",
+          "price": 50
+        },
+        {
+          "id": 2,
+          "description": "Tire rotation",
+          "price": 30
+        }
+      ],
+      "cin": "CIN12345",
+
+      "vehicleId": 1,
+      "idProprietaire": 1,
+      "isPaid": true
+    },
+    {
+      "id": "2",
+      "startTime": "2024-02-01T10:00:00Z",
+      "predictedEndTime": "2024-02-05T17:00:00Z",
+      "endTime": null,
+      "description": "Brake replacement",
+      "status": "PROCESSING",
+      "operations": [
+        {
+          "id": 3,
+          "description": "Brake replacement",
+          "price": 120
+        }
+      ],
+      "vehicleId": 2,
+      "idProprietaire": 2,
+      "cin": "CIN12345",
+
+      "isPaid": false
+    },
+    {
+      "id": "65ac",
+      "startTime": "",
+      "predictedEndTime": "",
+      "endTime": "",
+      "description": "",
+      "status": "PROCESSING",
+      "operations": [],
+      "vehicleId": "",
+      "idProprietaire": "",
+      "cin": "CIN12345",
+      "isPaid": false
+    }
+  ]
+}

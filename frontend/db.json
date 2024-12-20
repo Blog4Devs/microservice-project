@@ -1,0 +1,281 @@
+{
+  "clients": [
+    {
+      "id": "1",
+      "name": "John Doe",
+      "address": "123 Main St, Cityville",
+      "phone": "123-456-7890",
+      "email": "john.doe@example.com",
+      "cin": "CIN12345"
+    },
+    {
+      "id": "2",
+      "name": "Jane Smith",
+      "address": "456 Oak Ave, Townsville",
+      "phone": "987-654-3210",
+      "email": "jane.smith@example.com",
+      "cin": "CIN54321"
+    },
+    {
+      "id": "4.835714990383817",
+      "name": "Ilyass",
+      "address": "dddddddddddd",
+      "phone": "021325488",
+      "email": "ilyass@gmail.com",
+      "cin": "BF12547"
+    },
+    {
+      "id": "1.130838751923482",
+      "name": "Ismail",
+      "address": "dddddddddddd",
+      "phone": "0231554",
+      "email": "test@gmail.com",
+      "cin": "BF12547"
+    },
+    {
+      "id": 6.7536175373147,
+      "name": "Ismail",
+      "address": "dddddddddddd",
+      "phone": "0231554",
+      "email": "test@gmail.com",
+      "cin": "BF12547"
+    }
+  ],
+  "vehicles": [
+    {
+      "id": "1",
+      "vin": "1HGBH41JXMN109186",
+      "numMatriculation": "ABC-123",
+      "marque": "Toyota",
+      "annee": 2020,
+      "color": "Red",
+      "kilometrage": 25000,
+      "carburant": "ESSENCE",
+      "dateAchat": "2023-01-15T10:00:00Z",
+      "clientId": 1,
+      "isDelivered": true
+    },
+    {
+      "id": "2",
+      "vin": "2FTHF26G3HC123456",
+      "numMatriculation": "XYZ-456",
+      "marque": "Ford",
+      "annee": 2019,
+      "color": "Blue",
+      "kilometrage": 45000,
+      "carburant": "DIESEL",
+      "dateAchat": "2022-08-10T14:00:00Z",
+      "clientId": 2,
+      "isDelivered": false
+    }
+  ],
+  "maintenances": [
+    {
+      "id": "1",
+      "startTime": "2024-01-10T09:00:00Z",
+      "predictedEndTime": "2024-01-15T17:00:00Z",
+      "endTime": "2024-01-15T16:30:00Z",
+      "description": "Oil change and tire rotation",
+      "status": "FINISHED",
+      "operations": [
+        {
+          "id": 1,
+          "description": "Oil change",
+          "price": 50
+        },
+        {
+          "id": 2,
+          "description": "Tire rotation",
+          "price": 30
+        }
+      ],
+      "vehicleId": 1,
+      "idProprietaire": 1,
+      "isPaid": true
+    },
+    {
+      "id": "2",
+      "startTime": "2024-02-01T10:00:00Z",
+      "predictedEndTime": "2024-02-05T17:00:00Z",
+      "endTime": null,
+      "description": "Brake replacement",
+      "status": "PROCESSING",
+      "operations": [
+        {
+          "id": 3,
+          "description": "Brake replacement",
+          "price": 120
+        }
+      ],
+      "vehicleId": 2,
+      "idProprietaire": 2,
+      "isPaid": false
+    }
+  ],
+  "invoices": [
+    {
+      "id": "1",
+      "client": {
+        "id": 101,
+        "name": "John Doe",
+        "email": "john.doe@example.com",
+        "phone": "123-456-7890",
+        "address": "123 Main St, Anytown, USA"
+      },
+      "vehicules": [
+        {
+          "id": 201,
+          "vin": "1HGCM82633A123456",
+          "numMatriculation": "XYZ-123",
+          "marque": "Toyota",
+          "annee": 2018,
+          "color": "Red",
+          "kilometrage": 45000,
+          "carburant": "PETROL",
+          "dateAchat": "2020-06-15T00:00:00Z",
+          "clientId": 101,
+          "isDelivered": true
+        },
+        {
+          "id": 202,
+          "vin": "2HGCM82633A123457",
+          "numMatriculation": "ABC-987",
+          "marque": "Honda",
+          "annee": 2020,
+          "color": "Blue",
+          "kilometrage": 12000,
+          "carburant": "DIESEL",
+          "dateAchat": "2021-05-10T00:00:00Z",
+          "clientId": 101,
+          "isDelivered": false
+        }
+      ],
+      "maintenances": [
+        {
+          "id": 301,
+          "startTime": "2024-12-01T09:00:00Z",
+          "predictedEndTime": "2024-12-05T17:00:00Z",
+          "endTime": "2024-12-04T16:30:00Z",
+          "description": "Oil change and tire replacement",
+          "status": "COMPLETED",
+          "operations": [
+            {
+              "id": 401,
+              "description": "Oil change",
+              "price": 5000
+            },
+            {
+              "id": 402,
+              "description": "Tire replacement",
+              "price": 15000
+            }
+          ],
+          "vehicleId": 201,
+          "idProprietaire": 101,
+          "isPaid": true
+        },
+        {
+          "id": 302,
+          "startTime": "2024-12-10T10:00:00Z",
+          "predictedEndTime": "2024-12-12T15:00:00Z",
+          "endTime": null,
+          "description": "Brake inspection",
+          "status": "IN_PROGRESS",
+          "operations": [
+            {
+              "id": 403,
+              "description": "Brake pad replacement",
+              "price": 8000
+            }
+          ],
+          "vehicleId": 202,
+          "idProprietaire": 101,
+          "isPaid": false
+        }
+      ],
+      "timestamp": "2024-12-14T10:00:00Z"
+    },
+    {
+      "id": "2",
+      "client": {
+        "id": 102,
+        "name": "Jane Smith",
+        "email": "jane.smith@example.com",
+        "phone": "987-654-3210",
+        "address": "456 Oak Ave, Townsville"
+      },
+      "vehicules": [
+        {
+          "id": 203,
+          "vin": "1HGBH41JXMN109186",
+          "numMatriculation": "ABC-123",
+          "marque": "Toyota",
+          "annee": 2020,
+          "color": "Red",
+          "kilometrage": 25000,
+          "carburant": "ESSENCE",
+          "dateAchat": "2023-01-15T10:00:00Z",
+          "clientId": 102,
+          "isDelivered": true
+        },
+        {
+          "id": 204,
+          "vin": "2FTHF26G3HC123456",
+          "numMatriculation": "XYZ-456",
+          "marque": "Ford",
+          "annee": 2019,
+          "color": "Blue",
+          "kilometrage": 45000,
+          "carburant": "DIESEL",
+          "dateAchat": "2022-08-10T14:00:00Z",
+          "clientId": 102,
+          "isDelivered": false
+        }
+      ],
+      "maintenances": [
+        {
+          "id": 303,
+          "startTime": "2024-01-10T09:00:00Z",
+          "predictedEndTime": "2024-01-15T17:00:00Z",
+          "endTime": "2024-01-15T16:30:00Z",
+          "description": "Oil change and tire rotation",
+          "status": "FINISHED",
+          "operations": [
+            {
+              "id": 404,
+              "description": "Oil change",
+              "price": 50
+            },
+            {
+              "id": 405,
+              "description": "Tire rotation",
+              "price": 30
+            }
+          ],
+          "vehicleId": 203,
+          "idProprietaire": 102,
+          "isPaid": true
+        },
+        {
+          "id": 304,
+          "startTime": "2024-02-01T10:00:00Z",
+          "predictedEndTime": "2024-02-05T17:00:00Z",
+          "endTime": null,
+          "description": "Brake replacement",
+          "status": "PROCESSING",
+          "operations": [
+            {
+              "id": 406,
+              "description": "Brake replacement",
+              "price": 120
+            }
+          ],
+          "vehicleId": 204,
+          "idProprietaire": 102,
+          "isPaid": false
+        }
+      ],
+      "timestamp": "2024-12-14T11:00:00Z"
+    }
+  ]
+}

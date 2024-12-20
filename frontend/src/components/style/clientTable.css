@@ -1,0 +1,25 @@
+.clientTable {
+  color: #ffffff; /* White text */
+  font-weight: bold; /* Text styling */
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  padding: 20px;
+  border: none;
+  margin-top: 2rem;
+}
+
+.clientTable th,
+.clientTable td {
+  padding: 10px 15px; /* Space between table cells */
+}
+
+.clients {
+  display: flex;
+
+  align-items: center; /* Center horizontally */
+  justify-content: center; /* Center vertically */
+  flex-direction: column;
+}
+.columns {
+  color: #7400b6;
+}
