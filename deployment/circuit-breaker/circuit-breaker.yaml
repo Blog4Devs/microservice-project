@@ -4,26 +4,26 @@ metadata:
   name: custom-gateway
 spec:
   hosts:
-    - "*" # Accept traffic for any host (or specify your domain if needed)
+    - "*"
   gateways:
-    - garage-gateway # Reference the Istio Gateway created earlier
+    - garage-gateway 
   http:
     - match:
         - uri:
-            prefix: "/ui"  # Match traffic with the /ui prefix
+            prefix: "/ui"  
       route:
         - destination:
-            host: client-service # Default Istio Gateway Service
+            host: client-service 
             port:
-              number: 8080 # Port of the Istio default gateway
+              number: 8080 
     - match:
         - uri:
-            prefix: "/"  # Route all other traffic
+            prefix: "/"  
       route:
         - destination:
-            host: gateway-service # Replace with your gateway service name
+            host: gateway-service 
             port:
-              number: 8999 # Match your service's exposed port
+              number: 8999 
 
 ---
 apiVersion: networking.istio.io/v1alpha3
@@ -35,12 +35,12 @@ spec:
   trafficPolicy:
     connectionPool:
       tcp:
-        maxConnections: 1 # Limit TCP connections to 1
+        maxConnections: 1 
       http:
-        http1MaxPendingRequests: 1 # Limit HTTP1 pending requests to 1
-        maxRequestsPerConnection: 1 # Limit requests per connection to 1
+        http1MaxPendingRequests: 1 
+        maxRequestsPerConnection: 1 
     outlierDetection:
-      consecutiveErrors: 1 # Eject after 1 consecutive error
-      interval: 1s # Check every second
-      baseEjectionTime: 3m # Eject for 3 minutes
-      maxEjectionPercent: 100 # Eject up to 100% of instances if needed
+      consecutiveErrors: 1 
+      interval: 1s 
+      baseEjectionTime: 3m 
+      maxEjectionPercent: 100 
