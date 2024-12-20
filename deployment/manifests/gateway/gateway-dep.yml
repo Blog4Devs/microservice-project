@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
         - name: gateway-service
-          image: vinesen1/microservice-project-gateway
+          image: vinesen1/microservice-project-gateway:v4
           ports:
             - containerPort: 8999

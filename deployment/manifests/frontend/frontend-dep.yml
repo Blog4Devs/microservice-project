@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+  namespace: garage-ns
+  labels:
+    name: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: frontend   
+  template:
+    metadata:
+      labels:
+        name: frontend
+        version: v1
+    spec:
+      containers:
+        - name: frontend
+          image: vinesen1/frontend 
+          ports:
+            - containerPort: 80

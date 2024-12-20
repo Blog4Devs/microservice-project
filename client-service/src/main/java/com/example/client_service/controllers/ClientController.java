@@ -11,7 +11,7 @@ import com.example.client_service.services.ClientService;
 
 @RestController
 @RequestMapping("/api/clients")
-@CrossOrigin("*")
+
 public class ClientController {
 
     private final ClientService clientService;

@@ -7,10 +7,10 @@
 #     nginx.ingress.kubernetes.io/rewrite-target: /
 # spec:
 #   rules:
-#     - host: garage-harouy.com 
+#     - host: garage-harouy.com
 #       http:
 #         paths:
-#           - path: /  
+#           - path: /
 #             pathType: Prefix
 #             backend:
 #               service:

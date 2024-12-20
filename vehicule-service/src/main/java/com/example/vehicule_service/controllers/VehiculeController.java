@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/vehicules")
 @Slf4j
-@CrossOrigin("*")
+
 public class VehiculeController {
 
     @Autowired

@@ -13,8 +13,98 @@ spec:
         protocol: HTTP
       hosts:
         - "*"
-
 ---
+# apiVersion: networking.istio.io/v1alpha3
+# kind: Gateway
+# metadata:
+#   name: garage-gateway-frontend
+#   namespace: garage-ns
+# spec:
+#   selector:
+#     istio: ingressgateway
+#   servers:
+#     - port:
+#         number: 8081
+#         name: http-frontend
+#         protocol: HTTP
+#       hosts:
+#         - "*"
+
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: custom-gateway
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - garage-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /ui
+      route:
+        - destination:
+            host: frontend
+            port:
+              number: 80
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: gateway-service
+            port:
+              number: 8999
+# ---
+# apiVersion: networking.istio.io/v1
+# kind: VirtualService
+# metadata:
+#   name: custom-gateway
+# spec:
+#   hosts:
+#   -  "*"
+#   gateways:
+#     - garage-gateway
+#   http:
+#   - name: "frontend"
+#     match:
+#     - uri:
+#         prefix: "/frontend"
+#     route:
+#     - destination:
+#         host: frontend
+#   - name: "gateway"
+#     route:
+#     - destination:
+#         host: gateway-service
+# apiVersion: networking.istio.io/v1alpha3
+# kind: VirtualService
+# metadata:
+#   name: custom-gateway-frontend
+# spec:
+#   hosts:
+#     - "*"
+#   gateways:
+#     - garage-gateway-frontend
+#   http:
+#     - match:
+#         - uri:
+#             prefix:
+#               /
+#       route:
+#         - destination:
+#             host: frontend
+#             port:
+#               number: 80
+# - match:
+#     - uri:
+#         prefix: /
+#   route:
+#     - destination:
+#         host: gateway-service
+#         port:
+#           number: 8999
 # apiVersion: networking.istio.io/v1alpha3
 # kind: VirtualService
 # metadata:
@@ -32,49 +122,48 @@ spec:
 #           port:
 #             number: 8999  # Port of your custom gateway service
 
-apiVersion: networking.istio.io/v1alpha3
-kind: VirtualService
-metadata:
-  name: custom-gateway
-spec:
-  hosts:
-    - "*" # Accept traffic for any host (or specify your domain if needed)
-  gateways:
-    - garage-gateway # Reference the Istio Gateway created earlier
-  http:
-    - match:
-        - uri:
-            prefix:
-              /ui
-              # Match traffic with the /ui prefix
-      route:
-        - destination:
-            host: client-service # Default Istio Gateway Service
-            port:
-              number: 8080 # Port of the Istio default gateway
-    - match:
-        - uri:
-            prefix: / # Route all traffic
-      route:
-        - destination:
-            host: gateway-service # Replace with your gateway service name
-            port:
-              number: 8999 # Match your service's exposed port
+# apiVersion: networking.istio.io/v1alpha3
+# kind: VirtualService
+# metadata:
+#   name: custom-gateway
+# spec:
+#   hosts:
+#     - "*" # Accept traffic for any host (or specify your domain if needed)
+#   gateways:
+#     - garage-gateway # Reference the Istio Gateway created earlier
+#   http:
+#     - match:
+#         - uri:
+#             prefix:
+#               /ui
+#               # Match traffic with the /ui prefix
+#       route:
+#         - destination:
+#             host: client-service # Default Istio Gateway Service
+#             port:
+#               number: 8080 # Port of the Istio default gateway
+#     - match:
+#         - uri:
+#             prefix: / # Route all traffic
+#       route:
+#         - destination:
+#             host: gateway-service # Replace with your gateway service name
+#             port:
+#               number: 8999 # Match your service's exposed port
 
-
-  # - match:
-  #     - uri:
-  #         prefix: /ui  # Match traffic with the /ui prefix
-  #   route:
-  #     - destination:
-  #         host: istio-ingressgateway.istio-system.svc.cluster.local  # Default Istio Gateway Service
-  #         port:
-  #           number: 80  # Port of the Istio default gateway
-  # - match:
-  #     - uri:
-  #         prefix: /  # Match all other traffic
-  #   route:
-  #     - destination:
-  #         host: gateway-service  # Replace with your custom gateway's service name
-  #         port:
-  #           number: 80  # Port of your custom gateway service
+# - match:
+#     - uri:
+#         prefix: /ui  # Match traffic with the /ui prefix
+#   route:
+#     - destination:
+#         host: istio-ingressgateway.istio-system.svc.cluster.local  # Default Istio Gateway Service
+#         port:
+#           number: 80  # Port of the Istio default gateway
+# - match:
+#     - uri:
+#         prefix: /  # Match all other traffic
+#   route:
+#     - destination:
+#         host: gateway-service  # Replace with your custom gateway's service name
+#         port:
+#           number: 80  # Port of your custom gateway service

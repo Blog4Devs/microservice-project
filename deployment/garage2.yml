@@ -1,0 +1,26 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: custom-gateway
+spec:
+  hosts:
+    - "*" # Accept traffic for any host
+  gateways:
+    - garage-gateway # Reference the Istio Gateway
+  http:
+    - match:
+        - uri:
+            prefix: /ui # Match traffic with the /ui prefix
+      route:
+        - destination:
+            host: client-service # Your backend service
+            port:
+              number: 8080 # Port exposed by your backend service
+    - match:
+        - uri:
+            prefix: / # Route all other traffic
+      route:
+        - destination:
+            host: gateway-service # Replace with your actual gateway service name
+            port:
+              number: 8999 # Port exposed by your gateway service

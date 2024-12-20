@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: client-service
-          image: vinesen1/client-service
+          image: vinesen1/microservice-project-client-service:v5  
           ports:
             - containerPort: 8080
           env:
@@ -34,7 +34,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: client-secret
-                  key: MYSQL_PASSWORD 
+                  key: MYSQL_PASSWORD
           # resources:
           #   requests:
           #     memory: "128Mi"

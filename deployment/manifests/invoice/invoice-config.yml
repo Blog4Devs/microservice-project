@@ -4,6 +4,6 @@ metadata:
   name: invoice-config
   namespace: garage-ns
 data:
-  MONGO_URI: "mongodb://admin:cGFzc3dvcmQ=@mongodb:27017/invoice_db?authSource=admin"
+  MONGO_URI: "mongodb://admin:password@mongodb:27017/invoice_db?authSource=admin"
   MONGO_DATABASE: "invoice_db"
   MONGO_USERNAME: admin

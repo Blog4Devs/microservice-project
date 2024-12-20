@@ -89,25 +89,23 @@ spring:
           filters:
             - RewritePath=/graphiql, /graphiql?path=/graphql
       globalcors:
-          corsConfigurations:
-            '[/**]':
-              allowedOrigins:
-                - "*" # Swagger UI URL
-              allowedMethods:
-                - GET
-                - POST
-                - PUT
-                - DELETE
-                - OPTIONS
-              allowedHeaders:
-                - "*"
+        corsConfigurations:
+          "[/**]":
+            allowedOrigins:
+              - "*" # Swagger UI URL
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders:
+              - "*"
 
-    
   application:
     name: gateway-service
 server:
   port: 8999
-
 
 #springdoc:
 #  api-docs:
@@ -123,9 +121,9 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
     urls:
-      -   name: client-service
-          url: /CLIENT-SERVICE/v3/api-docs
-      -   name: vehicule-service
-          url: /VEHICULE-SERVICE/v3/api-docs
-      -   name: maintenance-service
-          url: /MAINTENANCE-SERVICE/v3/api-docs
+      - name: client-service
+        url: /CLIENT-SERVICE/v3/api-docs
+      - name: vehicule-service
+        url: /VEHICULE-SERVICE/v3/api-docs
+      - name: maintenance-service
+        url: /MAINTENANCE-SERVICE/v3/api-docs
